@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColorDark: Color(0xff37415E),
         cardColor: Color(0xff535D80),
+        buttonColor:Color(0xffAF7DDE) ,
         bottomAppBarColor: Color(0xff252F4A),
         secondaryHeaderColor: Color(0xff252F4A),
       ),
