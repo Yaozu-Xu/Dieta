@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/buttons/bottom_buttons.dart';
+import 'package:fyp_dieta/src/widgets/buttons/bottom_buttons.dart';
 
 class DietScreen extends StatelessWidget {
   static const routeName = '/diet';

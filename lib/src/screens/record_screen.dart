@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/cards/calories_card.dart';
-import '../widgets/cards/weight_info_card.dart';
-import '../widgets/cards/food_card.dart';
-import '../widgets/buttons/bottom_buttons.dart';
+import 'package:fyp_dieta/src/widgets/cards/calories_card.dart';
+import 'package:fyp_dieta/src/widgets/cards/weight_info_card.dart';
+import 'package:fyp_dieta/src/widgets/cards/food_card.dart';
+import 'package:fyp_dieta/src/widgets/buttons/bottom_buttons.dart';
 
 class RecordScreen extends StatelessWidget {
   static const routeName = '/';
