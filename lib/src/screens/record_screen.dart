@@ -21,6 +21,9 @@ class RecordScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).buttonColor,
           child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, '/food');
+          },
         ),
         backgroundColor: Theme.of(context).primaryColorDark,
         body: ListView(

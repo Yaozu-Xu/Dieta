@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/redux/actions/food_action.dart';
@@ -10,6 +11,34 @@ class SearchForm extends StatefulWidget {
 }
 
 class _SearchFormState extends State<SearchForm> {
+  final _controller = TextEditingController();
+  Timer _debounce;
+
+  _onSearchChanged() {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(
+        const Duration(milliseconds: 500),
+        () => {
+              StoreProvider.of<AppState>(context)
+                  .dispatch(SetFoodAction(FoodState(
+                search: _controller.text,
+                loaded: true,
+              )))
+            });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,14 +69,7 @@ class _SearchFormState extends State<SearchForm> {
                         }
                         return null;
                       },
-                      onChanged: (value) {
-                        // clear store cache each time load
-                        StoreProvider.of<AppState>(context)
-                            .dispatch(SetFoodAction(FoodState(
-                          search: value,
-                          loaded: true,
-                        )));
-                      },
+                      controller: _controller,
                     );
                   }))
         ]));
