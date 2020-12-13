@@ -11,6 +11,13 @@ class UserScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: BottomButtons(2),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).buttonColor,
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, '/login');
+          },
+      ),
     );
   }
 }
