@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "254500840356",
+    "firebase_url": "https://deita-464f9.firebaseio.com",
+    "project_id": "deita-464f9",
+    "storage_bucket": "deita-464f9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254500840356:android:d8ecd202ff65f0fffe9731",
+        "android_client_info": {
+          "package_name": "com.example.Dieta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254500840356-311od8547d7vv96bo9lnpj3alcc95i9g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGMOQ_v3pP9SH4rz4K3CPLiT9BIc4ZSUY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254500840356-311od8547d7vv96bo9lnpj3alcc95i9g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
