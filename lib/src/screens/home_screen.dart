@@ -4,7 +4,7 @@ import 'package:fyp_dieta/src/widgets/cards/weight_info_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/food_card.dart';
 import 'package:fyp_dieta/src/widgets/buttons/bottom_buttons.dart';
 
-class RecordScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   static const routeName = '/';
   @override
   Widget build(BuildContext context) {

@@ -1,11 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/redux/reducers/app_reducer.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
-import 'package:redux/redux.dart';
-import 'package:fyp_dieta/src/screens/record_screen.dart';
+import 'package:fyp_dieta/src/widgets/layouts/user_stream_builder.dart';
+import 'package:fyp_dieta/src/screens/home_screen.dart';
 import 'package:fyp_dieta/src/screens/diet_screen.dart';
 import 'package:fyp_dieta/src/screens/user_screen.dart';
 import 'package:fyp_dieta/src/screens/login_screen.dart';
@@ -32,10 +33,11 @@ class MyApp extends StatelessWidget {
         child: FutureBuilder(
             future: _firebaseApp,
             builder: (context, snapShot) {
+              
               if (snapShot.hasError) {
                 return Center(
                   child: CircularProgressIndicator(),
-                ); 
+                );
               } else if (snapShot.hasData) {
                 // firebase load successfully
                 return MaterialApp(
@@ -48,7 +50,8 @@ class MyApp extends StatelessWidget {
                     secondaryHeaderColor: Color(0xff252F4A),
                   ),
                   routes: {
-                    RecordScreen.routeName: (context) => RecordScreen(),
+                    HomeScreen.routeName: (context) =>
+                        UserStreamBuilder(buildedWidget: HomeScreen()),
                     FoodScreen.routeName: (context) => FoodScreen(),
                     DietScreen.routeName: (context) => DietScreen(),
                     LoginScreen.routeName: (context) => LoginScreen(),
