@@ -13,7 +13,9 @@ class _BottomButtonsState extends State<BottomButtons> {
 
   void _onItemTapped(int index) {
     setState(() {
-      Navigator.pushNamed(context, _routesList[index]);
+      if (index != widget._currentIndex) {
+        Navigator.pushNamed(context, _routesList[index]);
+      }
     });
   }
 
