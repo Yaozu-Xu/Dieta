@@ -2,16 +2,32 @@ import '../../assets/constants.dart';
 import 'package:flutter/material.dart';
 
 class CaloriesCard extends StatefulWidget {
+
+  final int totalCalories;
+  final int consume;
+  final int intake;
+
+  const CaloriesCard({@required this.totalCalories, this.consume, this.intake});
+
   @override
   _CaloriesCardState createState() => _CaloriesCardState();
 }
 
 class _CaloriesCardState extends State<CaloriesCard> {
+
   final String leftColumnLabel = 'Intake';
   final String rightColumnLabel = 'Consume';
   final brightPink = Color(0xffff6ba0);
   final brightOrange = Color(0xffffca28);
   final brightGreen = Color(0xff76ff03);
+
+  String _leftColumnValue() {
+   return widget.intake != null ? widget.intake.toString() : '0';
+  }
+
+  String _rightColumnValue() {
+   return widget.consume != null ? widget.consume.toString() : '0';
+  }
 
   Widget _buildExpandedColumn(String label, String count) {
     return Expanded(
@@ -68,7 +84,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
       child: Wrap(
         children: [
           Row(children: [
-            _buildExpandedColumn(leftColumnLabel, '100'),
+            _buildExpandedColumn(leftColumnLabel, _leftColumnValue()),
             Container(
                 child: Column(children: [
                   Container(
@@ -87,7 +103,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
                   Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
                       child: Text(
-                        '2000 kcals',
+                        widget.totalCalories.toString(),
                         style: TextStyle(
                             color: Colors.grey[300],
                             fontWeight: FontWeight.bold,
@@ -95,7 +111,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
                       )),
                 ]),
                 height: 200),
-            _buildExpandedColumn(rightColumnLabel, '200')
+            _buildExpandedColumn(rightColumnLabel, _rightColumnValue())
           ]),
           _buildNutritionRow(),
         ],

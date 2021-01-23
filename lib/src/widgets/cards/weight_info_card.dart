@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
-import '../../assets/constants.dart';
+import 'package:fyp_dieta/src/assets/constants.dart';
+import 'package:fyp_dieta/src/screens/collection_screen.dart';
 
 class WeightInfoCard extends StatefulWidget {
+  final String username;
+  final String uid;
+  final int weightStaging;
+  final dynamic weight;
+
+  const WeightInfoCard(
+      {@required this.username,
+      @required this.uid,
+      @required this.weightStaging,
+      @required this.weight});
+
   @override
   _WeightInfoCardState createState() => _WeightInfoCardState();
 }
 
 class _WeightInfoCardState extends State<WeightInfoCard> {
+  final List<String> weightStagingList = ['Reduce', 'Maintain', 'Gain'];
+
+  String targetedText() {
+    int flag = widget.weightStaging;
+    if (flag == 0) {
+      return '${widget.weight - 5} kg';
+    } else if (flag == 1) {
+      return '${widget.weight} kg';
+    }
+    return '${widget.weight + 5} kg';
+  }
+
   Widget _buildWeightInfoContainers(String label, String value) {
     return Expanded(
         child: Container(
@@ -15,7 +39,7 @@ class _WeightInfoCardState extends State<WeightInfoCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: EdgeInsets.only(bottom: 5),
+                    margin: EdgeInsets.only(bottom: 5),
                     child: Text(label,
                         style: labelStyle, textAlign: TextAlign.left)),
                 Container(
@@ -37,26 +61,37 @@ class _WeightInfoCardState extends State<WeightInfoCard> {
                 Expanded(
                   child: Container(
                     child: Text(
-                      'User',
+                      widget.username,
                       style: valueStyle.copyWith(fontSize: 18),
                     ),
                     margin: EdgeInsets.fromLTRB(20, 20, 0, 20),
                   ),
                 ),
                 Container(
-                  child: Icon(Icons.calendar_today, color: Colors.grey[300]),
+                  child: IconButton(
+                    icon: Icon(Icons.calendar_today),
+                    color: Colors.grey[300],
+                    tooltip: 'Redesign your plan',
+                    onPressed: () {
+                      Navigator.pushNamed(context, CollectionScreen.routeName,
+                          arguments: CollectionScreenArguments(
+                              implyLeading: true, uid: widget.uid));
+                    },
+                  ),
                   margin: EdgeInsets.only(right: 20),
                 )
               ],
             ),
             Row(
               children: [
-                _buildWeightInfoContainers('Stage', 'Reduced'),
-                _buildWeightInfoContainers('Now', '85.2 kg'),
-                _buildWeightInfoContainers('Targeted', '80kg'),
+                _buildWeightInfoContainers(
+                    'Stage', weightStagingList[widget.weightStaging]),
+                _buildWeightInfoContainers('Now', '${widget.weight} kg'),
+                _buildWeightInfoContainers('Targeted', targetedText()),
                 Expanded(
                     child: Container(
-                  child: Icon(Icons.arrow_forward_ios, color: Colors.grey[300].withOpacity(0.4)),
+                  child: Icon(Icons.arrow_forward_ios,
+                      color: Colors.grey[300].withOpacity(0.4)),
                   alignment: Alignment.centerRight,
                   margin: EdgeInsets.only(right: 20),
                 ))

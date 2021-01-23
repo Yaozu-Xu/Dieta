@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import '../../assets/constants.dart';
 
 class FoodCard extends StatefulWidget {
-  final int _labelIndex;
-  final String _intakeCalories;
-  final String _targetedCalories;
+  final int labelIndex;
+  final dynamic intakeCalories;
+  final dynamic suggestCaloires; 
 
-  const FoodCard(
-      this._labelIndex, this._intakeCalories, this._targetedCalories);
+  const FoodCard({@required this.labelIndex, @required this.intakeCalories, @required this.suggestCaloires});
 
   @override
   _FoodCardState createState() => _FoodCardState();
@@ -32,8 +31,8 @@ class _FoodCardState extends State<FoodCard> {
       color: Color(0xff76ff03),
     ),
   ];
-
   static const _labelList = ['Breakfast', 'Lunch', 'Dinner', 'Extra'];
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -46,13 +45,12 @@ class _FoodCardState extends State<FoodCard> {
             Container(
               alignment: Alignment.centerRight,
               margin: EdgeInsets.only(right: 10, top: 10),
-              child:
-                  Text(_labelList[widget._labelIndex], style: mealLabelStyle),
+              child: Text(_labelList[widget.labelIndex], style: mealLabelStyle),
             ),
             Container(
               margin: EdgeInsets.only(top: 20, bottom: 30),
               padding: EdgeInsets.all(4),
-              child: _IconList[widget._labelIndex],
+              child: _IconList[widget.labelIndex],
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.grey[300].withOpacity(0.4),
@@ -63,14 +61,14 @@ class _FoodCardState extends State<FoodCard> {
                     child: Column(children: [
               Container(
                 child: Text(
-                  widget._intakeCalories + ' kcals',
+                  '${widget.intakeCalories} kcals',
                   style: valueStyle.copyWith(fontSize: 14),
                 ),
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(left: 20, bottom: 5),
               ),
               Container(
-                child: Text('Suggest: ' + widget._targetedCalories,
+                child: Text('Suggest: ${widget.suggestCaloires}',
                     style: labelStyle.copyWith(fontSize: 12)),
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(left: 20),
