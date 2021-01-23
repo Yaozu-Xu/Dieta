@@ -9,3 +9,4 @@ TextStyle mealLabelStyle = TextStyle(
   fontSize: 15,
   letterSpacing: 1.2,
 );
+TextStyle listLabelStyle = TextStyle(color: Colors.grey[300], fontSize: 18);
