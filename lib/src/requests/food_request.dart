@@ -1,8 +1,9 @@
-import 'package:http/http.dart' as http;
-import 'dart:developer' as developer;
-import '../model/Food.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
+import 'dart:developer' as developer;
+import 'package:http/http.dart' as http;
+import 'package:fyp_dieta/src/model/Food.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 Future<FoodResponse> fetchFood(String query) async {
   const fields =
