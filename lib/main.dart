@@ -12,6 +12,7 @@ import 'package:fyp_dieta/src/screens/user_screen.dart';
 import 'package:fyp_dieta/src/screens/login_screen.dart';
 import 'package:fyp_dieta/src/screens/signup_screen.dart';
 import 'package:fyp_dieta/src/screens/food_screen.dart';
+import 'package:fyp_dieta/src/screens/collection_screen.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
                   routes: {
                     HomeScreen.routeName: (context) =>
                         UserStreamBuilder(buildedWidget: HomeScreen()),
+                    CollectionScreen.routeName: (context) => CollectionScreen(),
                     FoodScreen.routeName: (context) => FoodScreen(),
                     DietScreen.routeName: (context) => DietScreen(),
                     LoginScreen.routeName: (context) => LoginScreen(),
