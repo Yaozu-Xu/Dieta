@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_dieta/src/widgets/firebase/sign_in.dart';
+import 'package:fyp_dieta/src/utils/firebase/sign_in.dart';
 import 'package:fyp_dieta/src/utils/local_storage.dart';
 
 class GoogleSignInButton extends StatelessWidget {
@@ -14,10 +14,10 @@ class GoogleSignInButton extends StatelessWidget {
         padding: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 3.0),
         color: Color(0xFF4285F4),
         onPressed: () async {
-          String res = await signInWithGoogle(); 
-          if(res != null ){
+          String uid = await signInWithGoogle(); 
+          if(uid != null ){
             // sign in successfully
-            await initUserStorage(context);
+            await initUserStorage(context, uid);
           }else {
             print('fail at login');
           }
