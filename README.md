@@ -1,16 +1,19 @@
-# fyp_dieta
+# Dieta
 
-A new Flutter project.
+A health diet app for controlling weight
 
-## Getting Started
+# HomeScreen
 
-This project is a starting point for a Flutter application.
+Show calories and weight information
 
-A few resources to get you started if this is your first Flutter project:
+![][homepage]
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# FoodScreen
+
+Search food by name from Nutritionix API
+
+![][foodlist]
+
+[homepage]: ./screenshots/homepage.png
+[foodlist]: ./screenshots/foodlist.png
