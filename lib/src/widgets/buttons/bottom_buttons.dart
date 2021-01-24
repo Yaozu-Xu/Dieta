@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_dieta/src/screens/diet_screen.dart';
+import 'package:fyp_dieta/src/screens/home_screen.dart';
+import 'package:fyp_dieta/src/screens/user_screen.dart';
 
 class BottomButtons extends StatefulWidget {
   final int _currentIndex;
@@ -9,7 +12,7 @@ class BottomButtons extends StatefulWidget {
 }
 
 class _BottomButtonsState extends State<BottomButtons> {
-  final _routesList = ['/', '/diet', '/user'];
+  final _routesList = [HomeScreen.routeName, DietScreen.routeName, UserScreen.routeName];
 
   void _onItemTapped(int index) {
     setState(() {
