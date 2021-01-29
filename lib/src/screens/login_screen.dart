@@ -4,6 +4,7 @@ import 'package:fyp_dieta/src/screens/home_screen.dart';
 import 'package:fyp_dieta/src/screens/signup_screen.dart';
 import 'package:fyp_dieta/src/utils/validator.dart';
 import 'package:fyp_dieta/src/widgets/buttons/signin_buttons.dart';
+import 'package:fyp_dieta/src/widgets/common/animated_err_msg.dart';
 import 'package:fyp_dieta/src/widgets/inputs/login_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -47,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Login'),
         automaticallyImplyLeading: false,
       ),
@@ -106,20 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
               GoogleSignButtonPrimary(
                 margin: EdgeInsets.only(top: 40),
               ),
-              AnimatedOpacity(
-                opacity: this._showLoginError ? 1 : 0,
-                duration: Duration(milliseconds: 500),
-                child: Container(
-                    margin: EdgeInsets.only(top: 40),
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    color: Colors.grey[200],
-                    constraints: BoxConstraints(maxWidth: 200),
-                    child: Text(
-                      this._loginErrorMsg,
-                      style: TextStyle(color: Colors.red),
-                    )),
-              )
+              AnimatedErrorMsg(showError: this._showLoginError, errMag: this._loginErrorMsg)
             ]),
           ),
         )
