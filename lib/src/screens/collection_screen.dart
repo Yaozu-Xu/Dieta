@@ -67,6 +67,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
         ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Personal Data'),
         automaticallyImplyLeading: args.implyLeading ?? false,
       ),

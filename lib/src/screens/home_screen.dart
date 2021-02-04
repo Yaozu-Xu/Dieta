@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/redux/states/user_state.dart';
+import 'package:fyp_dieta/src/screens/food_screen.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/UserCollection.dart';
 import 'package:fyp_dieta/src/widgets/cards/calories_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/weight_info_card.dart';
@@ -33,13 +34,20 @@ class HomeScreen extends StatelessWidget {
           return (totalCalories / 4 - 100).round();
         }
         break;
+      default:
+        {
+          return null;
+        }
+        break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print(DateTime.now().toString());
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text('Record',
               style: TextStyle(
                   letterSpacing: 1.2,
@@ -52,7 +60,8 @@ class HomeScreen extends StatelessWidget {
           backgroundColor: Theme.of(context).buttonColor,
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.pushNamed(context, '/food');
+            Navigator.pushNamed(context, FoodScreen.routeName,
+                arguments: FoodScreenArguments(meal: MealsCategory.breakfast));
           },
         ),
         backgroundColor: Theme.of(context).primaryColorDark,
@@ -66,7 +75,8 @@ class HomeScreen extends StatelessWidget {
                     if (snapshot.hasError) {
                       return Text("Something went wrong");
                     }
-                    if (snapshot.connectionState == ConnectionState.done && snapshot.data.data() != null) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.data.data() != null) {
                       Map<String, dynamic> data = snapshot.data.data();
                       return ListView(
                         children: [
@@ -89,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                                   totalCalories: data['totalCalories'],
                                 ),
                               ),
-                               FoodCard(
+                              FoodCard(
                                 labelIndex: 1,
                                 intakeCalories: 0,
                                 suggestCaloires: suggestCalories(
@@ -101,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                               FoodCard(
+                              FoodCard(
                                 labelIndex: 2,
                                 intakeCalories: 0,
                                 suggestCaloires: suggestCalories(
@@ -109,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                                   totalCalories: data['totalCalories'],
                                 ),
                               ),
-                               FoodCard(
+                              FoodCard(
                                 labelIndex: 3,
                                 intakeCalories: 0,
                                 suggestCaloires: suggestCalories(
