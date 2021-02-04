@@ -1,13 +1,14 @@
-import '../../assets/constants.dart';
+import 'package:fyp_dieta/src/assets/constants.dart';
+import 'package:fyp_dieta/src/widgets/common/step_counter.dart';
 import 'package:flutter/material.dart';
 
 class CaloriesCard extends StatefulWidget {
 
   final int totalCalories;
-  final int consume;
   final int intake;
+  final String uid;
 
-  const CaloriesCard({@required this.totalCalories, this.consume, this.intake});
+  const CaloriesCard({@required this.totalCalories, this.intake, @required this.uid});
 
   @override
   _CaloriesCardState createState() => _CaloriesCardState();
@@ -16,17 +17,12 @@ class CaloriesCard extends StatefulWidget {
 class _CaloriesCardState extends State<CaloriesCard> {
 
   final String leftColumnLabel = 'Intake';
-  final String rightColumnLabel = 'Consume';
   final brightPink = Color(0xffff6ba0);
   final brightOrange = Color(0xffffca28);
   final brightGreen = Color(0xff76ff03);
 
   String _leftColumnValue() {
    return widget.intake != null ? widget.intake.toString() : '0';
-  }
-
-  String _rightColumnValue() {
-   return widget.consume != null ? widget.consume.toString() : '0';
   }
 
   Widget _buildExpandedColumn(String label, String count) {
@@ -111,7 +107,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
                       )),
                 ]),
                 height: 200),
-            _buildExpandedColumn(rightColumnLabel, _rightColumnValue())
+                Expanded(child: StepCounter(uid: widget.uid))
           ]),
           _buildNutritionRow(),
         ],

@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                       return ListView(
                         children: [
                           Column(children: [
-                            CaloriesCard(totalCalories: data['totalCalories']),
+                            CaloriesCard(totalCalories: data['totalCalories'], uid: uid),
                             WeightInfoCard(
                               username: userState.user.displayName,
                               uid: uid,
