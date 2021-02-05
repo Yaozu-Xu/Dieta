@@ -4,7 +4,7 @@ import 'package:fyp_dieta/src/screens/home_screen.dart';
 import 'package:fyp_dieta/src/screens/signup_screen.dart';
 import 'package:fyp_dieta/src/utils/validator.dart';
 import 'package:fyp_dieta/src/widgets/buttons/signin_buttons.dart';
-import 'package:fyp_dieta/src/widgets/common/animated_err_msg.dart';
+import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/login_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,8 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formkey = GlobalKey<FormState>();
   String _email;
   String _password;
-  String _loginErrorMsg = '';
-  bool _showLoginError = false;
 
   void _loginBtnPressed() async {
     if (this._formkey.currentState.validate()) {
@@ -28,20 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
             email: this._email, password: this._password);
         Navigator.pushNamed(context, HomeScreen.routeName);
       } on FirebaseAuthException catch (err) {
-        setState(() {
-          this._showLoginError = true;
-          this._loginErrorMsg = err.code;
-        });
+        Toast.showFailedMsg(context: context, message: err.code);
       }
-    }
-  }
-
-  void _hideErrorMsg() {
-    if(this._showLoginError) {
-      setState(() {
-        this._showLoginError = false;
-        this._loginErrorMsg = '';
-      });
     }
   }
 
@@ -64,7 +50,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 placeHolder: 'Email',
                 validator: Validator.emailValidator,
                 onChanged: (value) {
-                  this._hideErrorMsg();
                   setState(() {
                     this._email = value;
                   });
@@ -75,7 +60,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
                 validator: Validator.passwordValidator,
                 onChanged: (value) {
-                  this._hideErrorMsg();
                   setState(() {
                     this._password = value;
                   });
@@ -109,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
               GoogleSignButtonPrimary(
                 margin: EdgeInsets.only(top: 40),
               ),
-              AnimatedErrorMsg(showError: this._showLoginError, errMag: this._loginErrorMsg)
             ]),
           ),
         )

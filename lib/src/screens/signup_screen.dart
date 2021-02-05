@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/screens/collection_screen.dart';
 import 'package:fyp_dieta/src/utils/validator.dart';
-import 'package:fyp_dieta/src/widgets/common/animated_err_msg.dart';
+import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/login_input.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -17,11 +17,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String email;
   String username;
   String password;
-  String _loginErrorMsg = '';
-  bool _showLoginError = false;
 
   void _onPressed() async {
-    if(!this._formkey.currentState.validate()) return null;
+    if (!this._formkey.currentState.validate()) return null;
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
@@ -31,19 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           arguments: CollectionScreenArguments(
               implyLeading: false, uid: userCredential.user.uid));
     } on FirebaseAuthException catch (err) {
-      setState(() {
-        this._showLoginError = true;
-        this._loginErrorMsg = err.code;
-      });
-    }
-  }
-
-  void _hideErrorMsg() {
-    if (this._showLoginError) {
-      setState(() {
-        this._showLoginError = false;
-        this._loginErrorMsg = '';
-      });
+      Toast.showFailedMsg(context: context, message: err.code);
     }
   }
 
@@ -63,7 +49,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 placeHolder: 'Email',
                 validator: Validator.emailValidator,
                 onChanged: (value) {
-                  this._hideErrorMsg();
                   setState(() {
                     this.email = value;
                   });
@@ -73,7 +58,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 placeHolder: 'Usename',
                 validator: Validator.usernameValidator,
                 onChanged: (value) {
-                  this._hideErrorMsg();
                   setState(() {
                     this.username = value;
                   });
@@ -100,7 +84,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   )),
               Spacer(),
-              AnimatedErrorMsg(showError: this._showLoginError, errMag: this._loginErrorMsg)
             ]),
           ),
         ));
