@@ -13,8 +13,6 @@ class StepCounter extends StatefulWidget {
 }
 
 class _StepCounterState extends State<StepCounter> {
-  final String key = DateTime.now().toString().substring(0, 10);
-  
   final double _factor = 0.04;
   int _currentCaloires = 0;
   Stream<StepCount> _stepCountStream;
@@ -22,30 +20,30 @@ class _StepCounterState extends State<StepCounter> {
 
   void onStepCount(StepCount event) async {
     /// Handle step count changed
-    print(key);
     int currentSteps = event.steps;
-    int steps = await getTodaySteps(
-        key: this.key, steps: currentSteps, uid: widget.uid);
-    print('$key walks $steps steps');
+    int steps = await getStepsByDate(
+        key: genStepsStorageKey(uid: widget.uid),
+        steps: currentSteps,
+        uid: widget.uid);
     int caloires = (steps * _factor).floor();
     if (caloires > this._currentCaloires) {
-      await setTodayColories(key: this.key, calories: caloires);
+      await setColoriesByDate(
+          key: genCaloriesStorageKey(uid: widget.uid), calories: caloires);
       setState(() {
         this._currentCaloires = caloires;
       });
     }
   }
 
-  void onStepCountError(error) {
-    setState(() {
-      
-    });
+  void onStepCountError() {
+    setState(() {});
   }
 
   Future<void> initStream() async {
     _stepCountStream = Pedometer.stepCountStream;
     _stepCountStream.listen(onStepCount).onError(onStepCountError);
-    int calories = await getTodayColories(key: this.key);
+    int calories =
+        await getColoriesByDate(key: genStepsStorageKey(uid: widget.uid));
     setState(() {
       this._currentCaloires = calories;
     });
@@ -61,7 +59,7 @@ class _StepCounterState extends State<StepCounter> {
   void dispose() {
     super.dispose();
     if (this._stepCountStreamSubscription != null) {
-      this._stepCountStreamSubscription.cancel();
+      _stepCountStreamSubscription.cancel();
     }
   }
 

@@ -3,26 +3,33 @@ import 'package:fyp_dieta/src/widgets/common/step_counter.dart';
 import 'package:flutter/material.dart';
 
 class CaloriesCard extends StatefulWidget {
-
   final int totalCalories;
   final int intake;
+  final int suagr;
+  final int protein;
+  final int fat;
   final String uid;
 
-  const CaloriesCard({@required this.totalCalories, this.intake, @required this.uid});
+  const CaloriesCard(
+      {@required this.totalCalories,
+      @required this.intake,
+      @required this.uid,
+      @required this.suagr,
+      @required this.fat,
+      @required this.protein});
 
   @override
   _CaloriesCardState createState() => _CaloriesCardState();
 }
 
 class _CaloriesCardState extends State<CaloriesCard> {
-
   final String leftColumnLabel = 'Intake';
   final brightPink = Color(0xffff6ba0);
   final brightOrange = Color(0xffffca28);
   final brightGreen = Color(0xff76ff03);
 
   String _leftColumnValue() {
-   return widget.intake != null ? widget.intake.toString() : '0';
+    return widget.intake != null ? widget.intake.toString() : '0';
   }
 
   Widget _buildExpandedColumn(String label, String count) {
@@ -39,7 +46,8 @@ class _CaloriesCardState extends State<CaloriesCard> {
     ));
   }
 
-  Widget _buildNutritionColumn(String label, String count, Color color, double value) {
+  Widget _buildNutritionColumn(
+      String label, String count, Color color, double value) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -64,11 +72,10 @@ class _CaloriesCardState extends State<CaloriesCard> {
   Widget _buildNutritionRow() {
     return Row(children: [
       Expanded(
-        child: _buildNutritionColumn('Carb', '2', brightPink, .1),
+        child: _buildNutritionColumn('Carb', widget.suagr.toString(), brightPink, .1),
       ),
-      Expanded(
-          child: _buildNutritionColumn('Protein', '4', brightOrange, .2)),
-      Expanded(child: _buildNutritionColumn('Fat', '8', brightGreen, .4)),
+      Expanded(child: _buildNutritionColumn('Protein', widget.protein.toString(), brightOrange, .2)),
+      Expanded(child: _buildNutritionColumn('Fat', widget.fat.toString(), brightGreen, .4)),
     ]);
   }
 
@@ -107,7 +114,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
                       )),
                 ]),
                 height: 200),
-                Expanded(child: StepCounter(uid: widget.uid))
+            Expanded(child: StepCounter(uid: widget.uid))
           ]),
           _buildNutritionRow(),
         ],

@@ -27,11 +27,11 @@ class _BottomButtonsState extends State<BottomButtons> {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-            icon: Icon(Icons.event_note), title: Text('Record')),
+            icon: Icon(Icons.event_note), label: 'Record'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.restaurant), title: Text('Diet')),
+            icon: Icon(Icons.restaurant), label: 'Diet'),
         BottomNavigationBarItem(
-            icon: Icon(Icons.account_box), title: Text('User')),
+            icon: Icon(Icons.account_box), label: 'User'),
       ],
       backgroundColor: Theme.of(context).bottomAppBarColor,
       currentIndex: widget._currentIndex,
