@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class Toast {
   static void _buildOverLay(BuildContext context, String message, Color color) {
     OverlayEntry overlayEntry = OverlayEntry(builder: (context) {
-      //外层使用Positioned进行定位，控制在Overlay中的位置
       return Positioned(
           top: MediaQuery.of(context).size.height * 0.8,
           child: Material(
@@ -42,7 +41,7 @@ class Toast {
     });
   }
 
-  static void showFailedMsg({BuildContext context, String message}) {
+  static void showFailedMsg({@required BuildContext context, @required String message}) {
     _buildOverLay(
       context,
       message,
@@ -50,7 +49,7 @@ class Toast {
     );
   }
 
-  static void showSuccessMsg({BuildContext context, String message}) {
+  static void showSuccessMsg({@required BuildContext context, @required String message}) {
     _buildOverLay(
       context,
       message,
