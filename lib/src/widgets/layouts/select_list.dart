@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:fyp_dieta/src/assets/constants.dart';
 import 'dart:developer' as developer;
 import 'package:fyp_dieta/src/model/Food.dart';
+import 'package:fyp_dieta/src/utils/firebase/firestore/RecordCollection.dart';
+import 'package:fyp_dieta/src/widgets/common/toast.dart';
 
-class SelectList extends StatefulWidget {
-  final Future<FoodResponse> _foodResponseFuture;
-  const SelectList(this._foodResponseFuture);
-
-  @override
-  _SelectListState createState() => _SelectListState();
-}
-
-class _SelectListState extends State<SelectList> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class SelectList extends StatelessWidget {
+  final Future<FoodResponse> foodResponse;
+  final String uid;
+  final int mealType;
+  const SelectList(
+      {@required this.foodResponse,
+      @required this.uid,
+      @required this.mealType});
 
   String caloriesToolTipMessage(foodFields) {
     return 'protein ' +
@@ -32,7 +30,7 @@ class _SelectListState extends State<SelectList> {
 
   Widget _buildFutureListView() {
     return FutureBuilder(
-        future: widget._foodResponseFuture,
+        future: this.foodResponse,
         builder: (context, snapShot) {
           Widget renderedList;
           if (snapShot.hasData) {
@@ -75,9 +73,33 @@ class _SelectListState extends State<SelectList> {
                         child: IconButton(
                           icon: Icon(Icons.add_circle_outline),
                           tooltip: 'Add to record',
+                          onPressed: () async {
+                            int calories = foodFields.nfCalories.round();
+                            int protein = foodFields.nfProtein.round();
+                            int fat = foodFields.nfTotalFat.round();
+                            int suagrs = foodFields.nfSugars.round();
+                            try {
+                              await RecordCollection(
+                                      uid: this.uid, date: currentDate)
+                                  .pushFoodRecord(<String, dynamic>{
+                                "calories": calories,
+                                "protein": protein,
+                                "fat": fat,
+                                "suagrs": suagrs,
+                                'itemName': foodFields.itemName,
+                                'mealType': this.mealType,
+                                'id': DateTime.now().millisecondsSinceEpoch
+                              });
+                              Toast.showSuccessMsg(
+                                  context: context, message: 'success');
+                            } catch (error) {
+                              Toast.showFailedMsg(
+                                  context: context, message: 'failed');
+                            }
+                          },
                         ),
                         margin: EdgeInsets.only(right: 20),
-                      )
+                      ),
                     ]),
                   );
                 },
