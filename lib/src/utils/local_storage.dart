@@ -16,42 +16,48 @@ Future<void> initUserStorage(BuildContext context, String uid) async {
   }
 }
 
-Future<int> getTodaySteps(
+// key: current date time
+Future<int> getStepsByDate(
     {@required String key, @required int steps, @required String uid}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final int initialSteps = prefs.getInt('$key-steps');
+  final int initialSteps = prefs.getInt(key);
   if (initialSteps == null) {
-    prefs.setInt('$key-steps', steps);
+    prefs.setInt(key, steps);
+    // date is note updated
     if (prefs.getString('today') != key) {
-      // yesterday has records, upload yesterday records
-      if (prefs.getString('today') != null) {
-        await uploadYesterdayData(key: key, uid: uid, steps: steps);
+      String keyOfYesterday = prefs.getString('today');
+      // upload yesterday data
+      if (keyOfYesterday != null) {
+        await uploadYesterdayData(key: keyOfYesterday, uid: uid, steps: steps);
       }
-      prefs.setString('today', key);
     }
+    prefs.setString('today', key);
     return 0;
   }
   return steps - initialSteps;
 }
 
-Future<int> getTodayColories({@required String key}) async {
+Future<int> getColoriesByDate({@required String key}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final int calories = prefs.getInt('$key-caloriesFromSteps');
+  final int calories = prefs.getInt(key);
   if (calories == null) {
-    prefs.setInt('$key-caloriesFromSteps', 0);
+    prefs.setInt(key, 0);
     return 0;
   }
   return calories;
 }
 
-Future<void> setTodayColories(
+Future<void> setColoriesByDate(
     {@required String key, @required int calories}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setInt('$key-caloriesFromSteps', calories);
+  prefs.setInt(key, calories);
 }
 
 Future<void> uploadYesterdayData(
     {@required uid, @required key, @required steps}) async {
-  await RecordCollection(uid: uid, date: key).addNewRecords(
-      <String, dynamic>{"steps": steps, "consume": await getTodayColories(key: key)});
+  await RecordCollection(uid: uid, date: key)
+      .updateCaloriesRecord(<String, dynamic>{
+    "steps": steps,
+    "consume": await getColoriesByDate(key: key)
+  });
 }
