@@ -1,42 +1,44 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+
 import 'package:fyp_dieta/src/redux/reducers/app_reducer.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
-import 'package:fyp_dieta/src/widgets/layouts/user_stream_builder.dart';
-import 'package:fyp_dieta/src/screens/home_screen.dart';
+import 'package:fyp_dieta/src/screens/collection_screen.dart';
 import 'package:fyp_dieta/src/screens/diet_screen.dart';
-import 'package:fyp_dieta/src/screens/user_screen.dart';
+import 'package:fyp_dieta/src/screens/food_screen.dart';
+import 'package:fyp_dieta/src/screens/home_screen.dart';
 import 'package:fyp_dieta/src/screens/login_screen.dart';
 import 'package:fyp_dieta/src/screens/signup_screen.dart';
-import 'package:fyp_dieta/src/screens/food_screen.dart';
-import 'package:fyp_dieta/src/screens/collection_screen.dart';
+import 'package:fyp_dieta/src/screens/user_screen.dart';
+import 'package:fyp_dieta/src/widgets/layouts/user_stream_builder.dart';
 
-Future main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DotEnv().load('.env');
-  final store = Store<AppState>(appReducer, initialState: AppState.intital());
+  await DotEnv().load();
+  final Store<AppState> store =
+      Store<AppState>(appReducer, initialState: AppState.intital());
   runApp(MyApp(store: store));
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({Key key, this.store}) : super(key: key);
+
   final Store<AppState> store;
   final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
 
-  MyApp({Key key, this.store}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
+    return StoreProvider<AppState>(
         store: store,
-        child: FutureBuilder(
+        child: FutureBuilder<FirebaseApp>(
             future: _firebaseApp,
-            builder: (context, snapShot) {
-              
+            builder:
+                (BuildContext context, AsyncSnapshot<FirebaseApp> snapShot) {
               if (snapShot.hasError) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (snapShot.hasData) {
@@ -44,25 +46,31 @@ class MyApp extends StatelessWidget {
                 return MaterialApp(
                   title: 'Flutter Demo',
                   theme: ThemeData(
-                    primaryColorDark: Color(0xff37415E),
-                    cardColor: Color(0xff535D80),
-                    buttonColor: Color(0xffAF7DDE),
-                    bottomAppBarColor: Color(0xff252F4A),
-                    secondaryHeaderColor: Color(0xff252F4A),
+                    primaryColorDark: const Color(0xff37415E),
+                    cardColor: const Color(0xff535D80),
+                    buttonColor: const Color(0xffAF7DDE),
+                    bottomAppBarColor: const Color(0xff252F4A),
+                    secondaryHeaderColor: const Color(0xff252F4A),
                   ),
-                  routes: {
-                    HomeScreen.routeName: (context) =>
+                  routes: <String, WidgetBuilder>{
+                    HomeScreen.routeName: (BuildContext context) =>
                         UserStreamBuilder(buildedWidget: HomeScreen()),
-                    CollectionScreen.routeName: (context) => CollectionScreen(),
-                    FoodScreen.routeName: (context) => FoodScreen(),
-                    DietScreen.routeName: (context) => DietScreen(),
-                    LoginScreen.routeName: (context) => LoginScreen(),
-                    SignUpScreen.routeName: (context) => SignUpScreen(),
-                    UserScreen.routeName: (context) => UserScreen(),
+                    CollectionScreen.routeName: (BuildContext context) =>
+                        CollectionScreen(),
+                    FoodScreen.routeName: (BuildContext context) =>
+                        FoodScreen(),
+                    DietScreen.routeName: (BuildContext context) =>
+                        DietScreen(),
+                    LoginScreen.routeName: (BuildContext context) =>
+                        LoginScreen(),
+                    SignUpScreen.routeName: (BuildContext context) =>
+                        SignUpScreen(),
+                    UserScreen.routeName: (BuildContext context) =>
+                        UserScreen(),
                   },
                 );
               } else {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
