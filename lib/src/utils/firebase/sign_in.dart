@@ -37,5 +37,4 @@ Future<String> signInWithGoogle() async {
 Future<void> signOutGoogle() async {
   await googleSignIn.signOut();
   await FirebaseAuth.instance.signOut();
-  print("User Signed Out");
 }

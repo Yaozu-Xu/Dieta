@@ -3,24 +3,23 @@ import 'package:fyp_dieta/src/utils/firebase/sign_in.dart';
 import 'package:fyp_dieta/src/utils/local_storage.dart';
 
 class GoogleSignInButton extends StatelessWidget {
+  const GoogleSignInButton(
+      {@required this.margin, @required this.assets, @required this.theme});
+
   final EdgeInsets margin;
   final String assets;
   final int theme;
 
-  GoogleSignInButton({this.margin, @required this.assets, this.theme});
-
   Widget primaryThemeButton(BuildContext context) {
     return RaisedButton(
-        padding: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 3.0),
-        color: Color(0xFF4285F4),
+        padding: const EdgeInsets.only(top: 3.0, bottom: 3.0, left: 3.0),
+        color: const Color(0xFF4285F4),
         onPressed: () async {
-          String uid = await signInWithGoogle(); 
-          if(uid != null ){
+          final String uid = await signInWithGoogle();
+          if (uid != null) {
             // sign in successfully
             await initUserStorage(context, uid);
-          }else {
-            print('fail at login');
-          }
+          } 
         },
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -30,9 +29,9 @@ class GoogleSignInButton extends StatelessWidget {
               height: 36,
             ),
             Container(
-                padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                child: new Text(
-                  "Sign in with Google",
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                child: const Text(
+                  'Sign in with Google',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
                 )),
@@ -54,8 +53,8 @@ class GoogleSignInButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image(image: AssetImage(assets), height: 36.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
               child: Text(
                 'Sign in with Google',
                 style: TextStyle(
@@ -71,12 +70,12 @@ class GoogleSignInButton extends StatelessWidget {
   }
 
   Widget signInButton(BuildContext context) {
-    if (this.theme == 0) {
+    if (theme == 0) {
       return primaryThemeButton(context);
-    } else if (this.theme == 1) {
+    } else if (theme == 1) {
       return lightThemeButton();
     } else {
-      throw ('valid theme');
+      throw 'valid theme';
     }
   }
 
@@ -87,19 +86,17 @@ class GoogleSignInButton extends StatelessWidget {
 }
 
 class GoogleSignButtonPrimary extends GoogleSignInButton {
-  final EdgeInsets margin;
-  final String assets = 'lib/src/assets/image/google.png';
-  final int theme = 0;
-
-  GoogleSignButtonPrimary({this.margin, assets, theme})
-      : super(margin: margin, assets: assets, theme: theme);
+  const GoogleSignButtonPrimary({EdgeInsets margin})
+      : super(
+            margin: margin,
+            assets: 'lib/src/assets/image/google.png',
+            theme: 0);
 }
 
 class GoogleSignButtonLight extends GoogleSignInButton {
-  final EdgeInsets margin;
-  final String assets = 'lib/src/assets/image/google.png';
-  final int theme = 1;
-
-  GoogleSignButtonLight({this.margin, assets, theme})
-      : super(margin: margin, assets: assets, theme: theme);
+  const GoogleSignButtonLight({EdgeInsets margin})
+      : super(
+            margin: margin,
+            assets: 'lib/src/assets/image/google.png',
+            theme: 1);
 }

@@ -1,8 +1,8 @@
 class Validator {
 
-  static final emailReg = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+  static final RegExp emailReg = RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-  static String emailValidator(value) {
+  static String emailValidator(String value) {
     if (value.isEmpty) {
       return 'Please enter some text';
     }
@@ -12,7 +12,7 @@ class Validator {
     return null;
   }
 
-  static String passwordValidator(value) {
+  static String passwordValidator(String value) {
     if (value.isEmpty) {
       return 'Please enter some text';
     }
@@ -22,7 +22,7 @@ class Validator {
     return null;
   }
 
-  static String usernameValidator(value) {
+  static String usernameValidator(String value) {
     if (value.isEmpty) {
       return 'Please enter some text';
     }

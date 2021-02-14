@@ -11,20 +11,17 @@ class SearchForm extends StatefulWidget {
 }
 
 class _SearchFormState extends State<SearchForm> {
-  final _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   Timer _debounce;
 
-  _onSearchChanged() {
+  void _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(
-        const Duration(milliseconds: 500),
-        () => {
-              StoreProvider.of<AppState>(context)
-                  .dispatch(SetFoodAction(FoodState(
-                search: _controller.text,
-                loaded: true,
-              )))
-            });
+        const Duration(milliseconds: 800),
+        () => StoreProvider.of<AppState>(context)
+                .dispatch(SetFoodAction(FoodState(
+              search: _controller.text,
+            ))));
   }
 
   @override
@@ -42,36 +39,33 @@ class _SearchFormState extends State<SearchForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+        margin: const EdgeInsets.only(left: 30, right: 30, top: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20), color: Colors.grey[300]),
-        child: Row(children: [
+        child: Form(
+            child: Row(children: <Widget>[
           Container(
-            child: Icon(Icons.search),
-            margin: EdgeInsets.only(left: 10, right: 10),
+            margin: const EdgeInsets.only(left: 10, right: 10),
+            child: const Icon(Icons.search),
           ),
           Expanded(
-              child: StoreConnector<AppState, FoodState>(
-                  converter: (store) => store.state.foodState,
-                  builder: (context, foodState) {
-                    return TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Enter name of food',
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                      ),
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter some text';
-                        }
-                        return null;
-                      },
-                      controller: _controller,
-                    );
-                  }))
-        ]));
+              child: TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Enter name of food',
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none,
+            ),
+            validator: (String value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            controller: _controller,
+          ))
+        ])));
   }
 }

@@ -1,16 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fyp_dieta/src/model/User.dart';
+import 'package:fyp_dieta/src/model/user_model.dart';
 import 'package:fyp_dieta/src/redux/actions/user_action.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/redux/states/user_state.dart';
 import 'package:fyp_dieta/src/screens/login_screen.dart';
 
 class UserStreamBuilder extends StatefulWidget {
+  const UserStreamBuilder({@required this.buildedWidget});
   final Widget buildedWidget;
-
-  UserStreamBuilder({@required this.buildedWidget});
 
   @override
   _UserStreamBuilderState createState() => _UserStreamBuilderState();
@@ -19,11 +18,11 @@ class UserStreamBuilder extends StatefulWidget {
 class _UserStreamBuilderState extends State<UserStreamBuilder> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<User>(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
-            User user = snapshot.data;
+            final User user = snapshot.data;
             if (user == null) {
               return LoginScreen();
             }
@@ -34,7 +33,7 @@ class _UserStreamBuilderState extends State<UserStreamBuilder> {
             )));
             return widget.buildedWidget;
           } else {
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),

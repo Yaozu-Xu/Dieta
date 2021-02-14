@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginInputDecration extends StatelessWidget {
-  final FormFieldValidator validator;
-  final TextEditingController controller;
-  final Function onChanged;
-  final String placeHolder;
-  final bool obscureText;
-  LoginInputDecration({
+  const LoginInputDecration({
     this.validator,
     this.controller,
     this.onChanged,
@@ -14,24 +9,30 @@ class LoginInputDecration extends StatelessWidget {
     @required this.placeHolder,
   });
 
+  final FormFieldValidator<String> validator;
+  final TextEditingController controller;
+  final Function onChanged;
+  final String placeHolder;
+  final bool obscureText;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+      margin: const EdgeInsets.only(left: 30, right: 30, top: 10),
       child: TextFormField(
-          obscureText: this.obscureText ?? false,
+          obscureText: obscureText ?? false,
           decoration: InputDecoration(
-              hintText: placeHolder,
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[300], width: 1.0)),
-              errorBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 1.0)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue[300], width: 1.0)),  
-          ),      
+            hintText: placeHolder,
+            enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey[300])),
+            errorBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.red)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue[300])),
+          ),
           validator: validator,
           controller: controller,
-          onChanged: onChanged),
+          onChanged: onChanged as Function(String)),
     );
   }
 }
