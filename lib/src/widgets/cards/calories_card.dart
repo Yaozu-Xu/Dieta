@@ -1,78 +1,85 @@
-import '../../assets/constants.dart';
+import 'package:fyp_dieta/src/assets/constants.dart';
+import 'package:fyp_dieta/src/widgets/common/step_counter.dart';
 import 'package:flutter/material.dart';
 
 class CaloriesCard extends StatefulWidget {
+  const CaloriesCard(
+      {@required this.totalCalories,
+      @required this.intake,
+      @required this.uid,
+      @required this.suagr,
+      @required this.fat,
+      @required this.protein});
 
   final int totalCalories;
-  final int consume;
   final int intake;
-
-  const CaloriesCard({@required this.totalCalories, this.consume, this.intake});
+  final int suagr;
+  final int protein;
+  final int fat;
+  final String uid;
 
   @override
   _CaloriesCardState createState() => _CaloriesCardState();
 }
 
 class _CaloriesCardState extends State<CaloriesCard> {
-
   final String leftColumnLabel = 'Intake';
-  final String rightColumnLabel = 'Consume';
-  final brightPink = Color(0xffff6ba0);
-  final brightOrange = Color(0xffffca28);
-  final brightGreen = Color(0xff76ff03);
+  final Color brightPink = const Color(0xffff6ba0);
+  final Color brightOrange = const Color(0xffffca28);
+  final Color brightGreen = const Color(0xff76ff03);
 
   String _leftColumnValue() {
-   return widget.intake != null ? widget.intake.toString() : '0';
-  }
-
-  String _rightColumnValue() {
-   return widget.consume != null ? widget.consume.toString() : '0';
+    return widget.intake != null ? widget.intake.toString() : '0';
   }
 
   Widget _buildExpandedColumn(String label, String count) {
     return Expanded(
-        child: Container(
+        child: SizedBox(
       height: 200,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Text(count, style: valueStyle),
             Text(label, style: labelStyle),
           ]),
     ));
   }
 
-  Widget _buildNutritionColumn(String label, String count, Color color, double value) {
+  Widget _buildNutritionColumn(
+      String label, String count, Color color, double value) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Text(label, style: labelStyle),
           Container(
-              margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+              margin: const EdgeInsets.fromLTRB(20, 10, 10, 10),
               child: LinearProgressIndicator(
                 value: value,
                 backgroundColor: Colors.grey[300],
-                valueColor: AlwaysStoppedAnimation(color),
+                valueColor: AlwaysStoppedAnimation<Color>(color),
               )),
           Container(
-              child: Text(
-                count + 'g',
-                style: valueStyle.copyWith(fontSize: 14),
-              ),
-              margin: EdgeInsets.fromLTRB(0, 0, 0, 10))
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: Text(
+              '${count}g',
+              style: valueStyle.copyWith(fontSize: 14),
+            ),
+          )
         ]);
   }
 
   Widget _buildNutritionRow() {
-    return Row(children: [
+    return Row(children: <Widget>[
       Expanded(
-        child: _buildNutritionColumn('Carb', '2', brightPink, .1),
+        child: _buildNutritionColumn(
+            'Carb', widget.suagr.toString(), brightPink, .1),
       ),
       Expanded(
-          child: _buildNutritionColumn('Protein', '4', brightOrange, .2)),
-      Expanded(child: _buildNutritionColumn('Fat', '8', brightGreen, .4)),
+          child: _buildNutritionColumn(
+              'Protein', widget.protein.toString(), brightOrange, .2)),
+      Expanded(
+          child: _buildNutritionColumn(
+              'Fat', widget.fat.toString(), brightGreen, .4)),
     ]);
   }
 
@@ -80,38 +87,39 @@ class _CaloriesCardState extends State<CaloriesCard> {
   Widget build(BuildContext context) {
     return Card(
       color: Theme.of(context).cardColor,
-      margin: EdgeInsets.fromLTRB(10, 20, 10, 0),
+      margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: Wrap(
-        children: [
-          Row(children: [
+        children: <Widget>[
+          Row(children: <Widget>[
             _buildExpandedColumn(leftColumnLabel, _leftColumnValue()),
-            Container(
-                child: Column(children: [
-                  Container(
-                      margin: EdgeInsets.fromLTRB(0, 30, 0, 20),
-                      constraints: BoxConstraints.tightForFinite(
-                        height: 80,
-                        width: 80,
-                      ),
-                      child: CircularProgressIndicator(
-                        value: .8,
-                        strokeWidth: 5,
-                        backgroundColor: Colors.grey[300],
-                        valueColor:
-                            AlwaysStoppedAnimation(Colors.cyanAccent[100]),
-                      )),
-                  Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: Text(
-                        widget.totalCalories.toString(),
-                        style: TextStyle(
-                            color: Colors.grey[300],
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      )),
-                ]),
-                height: 200),
-            _buildExpandedColumn(rightColumnLabel, _rightColumnValue())
+            SizedBox(
+              height: 200,
+              child: Column(children: <Widget>[
+                Container(
+                    margin: const EdgeInsets.fromLTRB(0, 30, 0, 20),
+                    constraints: const BoxConstraints.tightForFinite(
+                      height: 80,
+                      width: 80,
+                    ),
+                    child: CircularProgressIndicator(
+                      value: .8,
+                      strokeWidth: 5,
+                      backgroundColor: Colors.grey[300],
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.cyanAccent[100]),
+                    )),
+                Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    child: Text(
+                      widget.totalCalories.toString(),
+                      style: TextStyle(
+                          color: Colors.grey[300],
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    )),
+              ]),
+            ),
+            Expanded(child: StepCounter(uid: widget.uid))
           ]),
           _buildNutritionRow(),
         ],

@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class CaloriesCalculator {
+  CaloriesCalculator(
+      {@required this.height,
+      @required this.weight,
+      @required this.age,
+      @required this.sex,
+      @required this.activityLevel,
+      @required this.weightStaging});
+
   final double lightActivityLevel = 1.53;
   final double moderateActivityLevel = 1.76;
   final double activeActivityLevel = 2.25;
@@ -13,69 +21,65 @@ class CaloriesCalculator {
   final int sex;
   final int activityLevel;
 
-  CaloriesCalculator(
-      {@required this.height,
-      @required this.weight,
-      @required this.age,
-      @required this.sex,
-      @required this.activityLevel,
-      @required this.weightStaging});
-
   double calculateBMR() {
-    if (this.sex == 0) {
+    if (sex == 0) {
       return 66.5 +
-          (13.75 * this.weight) +
-          (5.003 * this.height) -
-          (6.755 * this.age);
+          (13.75 * weight) +
+          (5.003 * height) -
+          (6.755 * age);
     }
     return 655 +
-        (9.563 * this.weight) +
-        (1.850 * this.height) -
-        (4.676 * this.age);
+        (9.563 * weight) +
+        (1.850 * height) -
+        (4.676 * age);
   }
 
   double getActivityFactor() {
-    List<double> activityLevelList = [
-      this.lightActivityLevel,
-      this.moderateActivityLevel,
-      this.activeActivityLevel
+    final List<double> activityLevelList = <double>[
+      lightActivityLevel,
+      moderateActivityLevel,
+      activeActivityLevel
     ];
-    return activityLevelList[this.activityLevel];
+    return activityLevelList[activityLevel];
   }
 
   int loseWeighTotalEnergy() {
-    return (calculateBMR() * this.getActivityFactor() -
-            this.loseWeightEnergyFactor)
+    return (calculateBMR() * getActivityFactor() -
+            loseWeightEnergyFactor)
         .round();
   }
 
   int maintainWeighTotalEnergy() {
-    return (calculateBMR() * this.getActivityFactor()).round();
+    return (calculateBMR() * getActivityFactor()).round();
   }
 
   int gainWeighTotalEnergy() {
-    return (calculateBMR() * this.getActivityFactor() +
-            this.gainWeightEnergyFactor)
+    return (calculateBMR() * getActivityFactor() +
+            gainWeightEnergyFactor)
         .round();
   }
 
   int calculateTotalEnergy() {
-    switch (this.weightStaging) {
-      case 0: {
-        return this.loseWeighTotalEnergy();
-      }
-      break;
-      case 1: {
-        return this.maintainWeighTotalEnergy();
-      }
-      break;
-      case 2: {
-        return this.gainWeighTotalEnergy();
-      }
-      break;
-      default: {
-        return this.maintainWeighTotalEnergy();
-      }
+    switch (weightStaging) {
+      case 0:
+        {
+          return loseWeighTotalEnergy();
+        }
+        break;
+      case 1:
+        {
+          return maintainWeighTotalEnergy();
+        }
+        break;
+      case 2:
+        {
+          return gainWeighTotalEnergy();
+        }
+        break;
+      default:
+        {
+          return maintainWeighTotalEnergy();
+        }
     }
   }
 }
