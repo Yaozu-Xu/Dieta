@@ -10,3 +10,13 @@ TextStyle mealLabelStyle = TextStyle(
   letterSpacing: 1.2,
 );
 TextStyle listLabelStyle = TextStyle(color: Colors.grey[300], fontSize: 18);
+
+String currentDate = DateTime.now().toString().substring(0, 10);
+
+String genCaloriesStorageKey({@required String uid}) {
+  return '$uid-$currentDate-calories';
+}
+
+String genStepsStorageKey({@required String uid}) {
+  return '$uid-$currentDate-steps';
+}
