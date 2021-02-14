@@ -2,47 +2,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/screens/collection_screen.dart';
 import 'package:fyp_dieta/src/utils/validator.dart';
+import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/login_input.dart';
 
 class SignUpScreen extends StatefulWidget {
-  static const routeName = '/signup';
+  static const String routeName = '/signup';
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _formkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   String email;
   String username;
   String password;
-  String _loginErrorMsg = '';
-  bool _showLoginError = false;
 
-  void _onPressed() async {
-    if(!this._formkey.currentState.validate()) return null;
+  Future<void> _onPressed() async {
+    if (!_formkey.currentState.validate()) return;
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: this.email, password: this.password);
-      await userCredential.user.updateProfile(displayName: this.username);
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await userCredential.user.updateProfile(displayName: username);
       Navigator.pushNamed(context, CollectionScreen.routeName,
           arguments: CollectionScreenArguments(
               implyLeading: false, uid: userCredential.user.uid));
     } on FirebaseAuthException catch (err) {
-      setState(() {
-        this._showLoginError = true;
-        this._loginErrorMsg = err.code;
-      });
-    }
-  }
-
-  void _hideErrorMsg() {
-    if (this._showLoginError) {
-      setState(() {
-        this._showLoginError = false;
-        this._loginErrorMsg = '';
-      });
+      Toast.showFailedMsg(context: context, message: err.code);
     }
   }
 
@@ -50,69 +36,55 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('SignUp'),
+          title: const Text('SignUp'),
         ),
         body: Container(
-          margin: EdgeInsets.only(top: 30),
+          margin: const EdgeInsets.only(top: 30),
           child: Form(
-            autovalidate: true,
-            key: this._formkey,
-            child: Column(children: [
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: _formkey,
+            child: Column(children: <Widget>[
               LoginInputDecration(
                 placeHolder: 'Email',
                 validator: Validator.emailValidator,
-                onChanged: (value) {
-                  this._hideErrorMsg();
+                onChanged: (String value) {
                   setState(() {
-                    this.email = value;
+                    email = value;
                   });
                 },
               ),
               LoginInputDecration(
                 placeHolder: 'Usename',
-                validator: Validator.usernameValidator,
-                onChanged: (value) {
-                  this._hideErrorMsg();
+                validator:
+                    Validator.usernameValidator,
+                onChanged: (String value) {
                   setState(() {
-                    this.username = value;
+                    username = value;
                   });
                 },
               ),
               LoginInputDecration(
                 placeHolder: 'Password',
                 obscureText: true,
-                validator: Validator.passwordValidator,
-                onChanged: (value) {
+                validator:
+                    Validator.passwordValidator,
+                onChanged: (String value) {
                   setState(() {
-                    this.password = value;
+                    password = value;
                   });
                 },
               ),
               Container(
-                  margin: EdgeInsets.only(left: 20, right: 20, top: 30),
+                  margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
                   width: MediaQuery.of(context).size.width,
                   child: OutlineButton(
                     onPressed: _onPressed,
-                    child: Text(
+                    child: const Text(
                       'SignUp',
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   )),
-              Spacer(),
-              AnimatedOpacity(
-                opacity: this._showLoginError ? 1 : 0,
-                duration: Duration(milliseconds: 500),
-                child: Container(
-                    margin: EdgeInsets.only(top: 40),
-                    padding: EdgeInsets.all(10),
-                    alignment: Alignment.center,
-                    color: Colors.grey[200],
-                    constraints: BoxConstraints(maxWidth: 200),
-                    child: Text(
-                      this._loginErrorMsg,
-                      style: TextStyle(color: Colors.red),
-                    )),
-              )
+             const Spacer(),
             ]),
           ),
         ));
