@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/screens/home_screen.dart';
-import 'package:fyp_dieta/src/utils/firebase/firestore/UserCollection.dart';
+import 'package:fyp_dieta/src/utils/firebase/firestore/user_collection.dart';
+import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/bordered_input.dart';
 import 'package:fyp_dieta/src/utils/calories_calculator.dart';
 
 class CollectionScreen extends StatefulWidget {
-  static const routeName = '/collection';
+  static const String routeName = '/collection';
   @override
   _CollectionScreenState createState() => _CollectionScreenState();
 }
@@ -13,10 +14,10 @@ class CollectionScreen extends StatefulWidget {
 enum GenderCharacter { male, female }
 
 class CollectionScreenArguments {
+  CollectionScreenArguments({@required this.implyLeading, @required this.uid});
+
   final bool implyLeading;
   final String uid;
-
-  CollectionScreenArguments({@required this.implyLeading, @required this.uid});
 }
 
 class _CollectionScreenState extends State<CollectionScreen> {
@@ -26,32 +27,42 @@ class _CollectionScreenState extends State<CollectionScreen> {
   int _age;
   double _height;
   double _weight;
-  List<String> _sportsLevelLabelLists = ['Light', 'Moderate', 'Heavy'];
-  List<String> _weightStagingList = ['Reduce', 'Maintain', 'Gain'];
+  final List<String> _sportsLevelLabelLists = <String>[
+    'Light',
+    'Moderate',
+    'Heavy'
+  ];
+  final List<String> _weightStagingList = <String>[
+    'Reduce',
+    'Maintain',
+    'Gain'
+  ];
 
-  _buildDropDownList(
-      {int index, List<String> list, String hint, Function onChanged}) {
+  Container _buildDropDownList(
+      {int index,
+      List<String> list,
+      String hint,
+      Function(dynamic) onChanged}) {
     return Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               color: Colors.grey[500],
-              width: 1.0,
             )),
-        child: DropdownButton(
+        child: DropdownButton<dynamic>(
           value: index,
-          hint: Container(margin: EdgeInsets.only(left: 10), child: Text(hint)),
-          iconSize: 24,
+          hint: Container(
+              margin: const EdgeInsets.only(left: 10), child: Text(hint)),
           elevation: 16,
-          underline: SizedBox(),
+          underline: const SizedBox(),
           onChanged: onChanged,
-          items: list.map<DropdownMenuItem>((String value) {
-            return DropdownMenuItem(
+          items: list.map<DropdownMenuItem<dynamic>>((String value) {
+            return DropdownMenuItem<dynamic>(
               value: list.indexOf(value),
               child: Container(
                 width: 175,
-                padding: EdgeInsets.only(left: 10),
+                padding: const EdgeInsets.only(left: 10),
                 child: Text(
                   value,
                 ),
@@ -64,139 +75,141 @@ class _CollectionScreenState extends State<CollectionScreen> {
   @override
   Widget build(BuildContext context) {
     final CollectionScreenArguments args =
-        ModalRoute.of(context).settings.arguments;
+        ModalRoute.of(context).settings.arguments as CollectionScreenArguments;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Personal Data'),
+        centerTitle: true,
+        title: const Text('Personal Data'),
         automaticallyImplyLeading: args.implyLeading ?? false,
       ),
       body: Column(
-        children: [
+        children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 50),
+            margin: const EdgeInsets.only(top: 50),
           ),
           Container(
-            constraints: BoxConstraints(maxWidth: 200),
+            constraints: const BoxConstraints(maxWidth: 200),
             child: Row(
-              children: [
-                Spacer(),
-                Radio(
+              children: <Widget>[
+                const Spacer(),
+                Radio<GenderCharacter>(
                   value: GenderCharacter.male,
                   groupValue: _sex,
-                  onChanged: (value) {
+                  onChanged: (GenderCharacter value) {
                     setState(() {
                       _sex = value;
                     });
                   },
                 ),
-                Text('Male', style: TextStyle(fontSize: 16)),
-                Radio(
+                const Text('Male', style: TextStyle(fontSize: 16)),
+                Radio<GenderCharacter>(
                   value: GenderCharacter.female,
                   groupValue: _sex,
-                  onChanged: (value) {
+                  onChanged: (GenderCharacter value) {
                     setState(() {
                       _sex = value;
                     });
                   },
                 ),
-                Text('Female', style: TextStyle(fontSize: 16)),
-                Spacer(),
+                const Text('Female', style: TextStyle(fontSize: 16)),
+                const Spacer(),
               ],
             ),
           ),
           BorderDecoration(
             placeHolder: 'Age Year',
-            validator: (value) {
-              if (value.isEmpty) {
+            validator: (dynamic value) {
+              if (value.isEmpty as bool) {
                 return 'Please enter some text';
               }
               return null;
             },
-            onChanged: (age) {
+            onChanged: (String age) {
               setState(() {
-                this._age = int.parse(age);
+                _age = int.parse(age);
               });
             },
           ),
           BorderDecoration(
             placeHolder: 'Height CM',
-            validator: (value) {
-              if (value.isEmpty) {
+            validator: (dynamic value) {
+              if (value.isEmpty as bool) {
                 return 'Please enter some text';
               }
               return null;
             },
-            onChanged: (height) {
+            onChanged: (String height) {
               setState(() {
-                this._height = double.parse(height);
+                _height = double.parse(height);
               });
             },
           ),
           BorderDecoration(
             placeHolder: 'Weight KG',
-            validator: (value) {
-              if (value.isEmpty) {
+            validator: (dynamic value) {
+              if (value.isEmpty as bool) {
                 return 'Please enter some text';
               }
               return null;
             },
-            onChanged: (weight) {
+            onChanged: (String weight) {
               setState(() {
-                this._weight = double.parse(weight);
+                _weight = double.parse(weight);
               });
             },
           ),
           _buildDropDownList(
-            index: this._sportsLevel,
-            list: this._sportsLevelLabelLists,
+            index: _sportsLevel,
+            list: _sportsLevelLabelLists,
             hint: 'Activity Level',
-            onChanged: (newValue) {
+            onChanged: (dynamic newValue) {
               setState(() {
-                this._sportsLevel = newValue;
+                _sportsLevel = newValue as int;
               });
             },
           ),
           _buildDropDownList(
-            index: this._weightStaging,
-            list: this._weightStagingList,
+            index: _weightStaging,
+            list: _weightStagingList,
             hint: 'Weight Staging',
-            onChanged: (newValue) {
+            onChanged: (dynamic newValue) {
               setState(() {
-                this._weightStaging = newValue;
+                _weightStaging = newValue as int;
               });
             },
           ),
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 20),
             child: ButtonTheme(
               minWidth: 200,
               buttonColor: Colors.orange[400],
               child: RaisedButton(
                 onPressed: () async {
                   try {
-                    int totalCalories = CaloriesCalculator(
-                          activityLevel: this._sportsLevel,
-                          age: this._age,
-                          sex: this._sex.index,
-                          height: this._height,
-                          weight: this._weight,
-                          weightStaging: this._weightStaging)
-                      .calculateTotalEnergy();
-                    await UserCollection().addUserSettings(args.uid, <String, dynamic>{
-                      "age": this._age,
-                      "sex": this._sex.index,
-                      "height": this._height,
-                      "weight": this._weight,
-                      "weightStaging": this._weightStaging,
-                      "sportsLevel": this._sportsLevel,
-                      "totalCalories": totalCalories,
+                    final int totalCalories = CaloriesCalculator(
+                            activityLevel: _sportsLevel,
+                            age: _age,
+                            sex: _sex.index,
+                            height: _height,
+                            weight: _weight,
+                            weightStaging: _weightStaging)
+                        .calculateTotalEnergy();
+                    await UserCollection()
+                        .addUserSettings(args.uid, <String, dynamic>{
+                      'age': _age,
+                      'sex': _sex.index,
+                      'height': _height,
+                      'weight': _weight,
+                      'weightStaging': _weightStaging,
+                      'sportsLevel': _sportsLevel,
+                      'totalCalories': totalCalories,
                     });
                     Navigator.pushNamed(context, HomeScreen.routeName);
                   } catch (err) {
-                    print(err.toString());
+                    Toast.showFailedMsg(context: context, message: 'err');
                   }
                 },
-                child: Text(
+                child: const Text(
                   'Calculate',
                   style: TextStyle(color: Colors.white, fontSize: 17),
                 ),
