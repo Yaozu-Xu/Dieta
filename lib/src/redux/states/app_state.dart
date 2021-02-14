@@ -4,13 +4,13 @@ import 'package:meta/meta.dart';
 
 @immutable
 class AppState {
-  final FoodState foodState;
-  final UserState userState;
-
-  AppState({@required this.foodState, @required this.userState});
+  const AppState({@required this.foodState, @required this.userState});
 
   factory AppState.intital() {
     return AppState(
         foodState: FoodState.initial(), userState: UserState.initial());
   }
+
+  final FoodState foodState;
+  final UserState userState;
 }

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:fyp_dieta/src/model/Food.dart';
+import 'package:fyp_dieta/src/model/food_model.dart';
 
 class FoodState {
+  FoodState({this.search, this.total, this.maxScore, this.loaded, this.hits});
+
+  factory FoodState.initial() => FoodState(loaded: false, hits: <FoodHits>[]);
+
   final int total;
   final String search;
   final dynamic maxScore;
   final bool loaded;
   final List<FoodHits> hits;
-
-  FoodState({this.search, this.total, this.maxScore, this.loaded, this.hits});
-
-  factory FoodState.initial() =>
-      FoodState(total: null, search: null, maxScore: null, loaded: false, hits: []);
 
   FoodState copyWith({
     @required int total,
@@ -20,10 +19,10 @@ class FoodState {
     @required List<FoodHits> hits,
   }) {
     return FoodState(
-        total: total ?? this.total,
-        search: search ?? this.search,
-        maxScore: maxScore ?? this.maxScore,
-        loaded: loaded ?? this.loaded,
-        hits: hits ?? this.hits);
+        total: total ?? total,
+        search: search ?? search,
+        maxScore: maxScore ?? maxScore,
+        loaded: loaded ?? loaded,
+        hits: hits ?? hits);
   }
 }
