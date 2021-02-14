@@ -15,5 +15,8 @@ Search food by name from Nutritionix API
 
 ![][foodlist]
 
-[homepage]: ./screenshots/homepage.png
+Make records of your meals
+
+[homepage]: ./screenshots/home.png
 [foodlist]: ./screenshots/foodlist.png
+[foodrecords]: ./screenshots/foodrecords.png
