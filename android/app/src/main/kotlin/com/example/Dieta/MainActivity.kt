@@ -1,4 +1,4 @@
-package com.example.fyp_dieta
+package com.example.Dieta
 
 import io.flutter.embedding.android.FlutterActivity
 
