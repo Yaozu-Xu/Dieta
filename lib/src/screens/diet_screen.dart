@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/model/diet_model.dart';
+import 'package:fyp_dieta/src/redux/states/app_state.dart';
+import 'package:fyp_dieta/src/redux/states/user_state.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/diet_collection.dart';
 import 'package:fyp_dieta/src/widgets/buttons/bottom_buttons.dart';
 import 'package:fyp_dieta/src/widgets/cards/diet_card.dart';
+import 'package:redux/redux.dart';
 
 class DietScreen extends StatelessWidget {
   static const String routeName = '/diet';
@@ -11,18 +15,30 @@ class DietScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Diet',
-          ),
-          backgroundColor: Theme.of(context).secondaryHeaderColor,
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-        ),
-        backgroundColor: Theme.of(context).primaryColorDark,
-        bottomNavigationBar: const BottomButtons(1),
-        body: FutureBuilder<DocumentSnapshot>(
-          future: DietCollection.getLowCaloriesDiets(),
+      appBar: AppBar(
+        title: Text('Diet',
+            style: TextStyle(
+                letterSpacing: 1.2, color: Colors.grey[200].withOpacity(0.4))),
+        backgroundColor: Theme.of(context).secondaryHeaderColor,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+      ),
+      backgroundColor: Theme.of(context).primaryColorDark,
+      bottomNavigationBar: const BottomButtons(1),
+      body: StoreConnector<AppState, UserState>(
+          converter: (Store<AppState> store) => store.state.userState,
+      builder: (BuildContext context, UserState userState) {
+        Future<DocumentSnapshot> future;
+        final int flag = userState.settings.weightStaging;
+        if(flag == 0) {
+          future = DietCollection.getLowCaloriesDiets();
+        }else if(flag == 1){
+          future = DietCollection.getHealthyCaloriesDiets();
+        }else {
+          future = DietCollection.getFitnessCaloriesDiets();
+        }
+        return FutureBuilder<DocumentSnapshot>(
+          future: future,
           builder: (BuildContext context, AsyncSnapshot<dynamic> dietSnapshot) {
             if (dietSnapshot.hasData && dietSnapshot.data.data() != null) {
               final List<dynamic> dietlList =
@@ -46,6 +62,8 @@ class DietScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             ));
           },
-        ));
+        );
+      },
+    ));
   }
 }

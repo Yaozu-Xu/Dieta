@@ -8,7 +8,7 @@ class BorderDecoration extends StatelessWidget {
       @required this.placeHolder,
       this.onChanged});
 
-  final FormFieldValidator validator;
+  final FormFieldValidator<String> validator;
   final TextEditingController controller;
   final String placeHolder;
   final Function onChanged;
@@ -23,7 +23,7 @@ class BorderDecoration extends StatelessWidget {
             hintText: placeHolder, border: const OutlineInputBorder()),
         validator: validator,
         controller: controller,
-        onChanged: onChanged as Function(dynamic),
+        onChanged: onChanged as Function(String),
       ),
     );
   }

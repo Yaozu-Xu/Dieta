@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
-import 'package:fyp_dieta/src/screens/collection_screen.dart';
+import 'package:fyp_dieta/src/screens/user_screen.dart';
 
 class WeightInfoCard extends StatefulWidget {
   const WeightInfoCard(
@@ -67,14 +67,12 @@ class _WeightInfoCardState extends State<WeightInfoCard> {
                 ),
                 Container(
                   margin: const EdgeInsets.only(right: 20),
-                  child:  IconButton(
+                  child: IconButton(
                     icon: const Icon(Icons.calendar_today),
                     color: Colors.grey[300],
                     tooltip: 'Redesign your plan',
                     onPressed: () {
-                      Navigator.pushNamed(context, CollectionScreen.routeName,
-                          arguments: CollectionScreenArguments(
-                              implyLeading: true, uid: widget.uid));
+                      Navigator.pushNamed(context, UserScreen.routeName);
                     },
                   ),
                 )
