@@ -41,6 +41,7 @@ dependencies:
   pedometer: ^2.0.2
   badges: ^1.1.6
   url_launcher: ^5.7.10
+  flutter_icons: ^1.1.0
 
 dev_dependencies:
   flutter_test:
