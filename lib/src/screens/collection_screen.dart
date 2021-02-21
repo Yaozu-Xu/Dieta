@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/screens/home_screen.dart';
+import 'package:fyp_dieta/src/utils/validator.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/user_collection.dart';
 import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/bordered_input.dart';
@@ -27,6 +28,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
   int _age;
   double _height;
   double _weight;
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   final List<String> _sportsLevelLabelLists = <String>[
     'Light',
     'Moderate',
@@ -44,7 +46,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
       String hint,
       Function(dynamic) onChanged}) {
     return Container(
-        margin: const EdgeInsets.only(top: 10),
+        margin: const EdgeInsets.only(top: 10, right: 30, left: 30),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
@@ -77,147 +79,135 @@ class _CollectionScreenState extends State<CollectionScreen> {
     final CollectionScreenArguments args =
         ModalRoute.of(context).settings.arguments as CollectionScreenArguments;
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Personal Data'),
-        automaticallyImplyLeading: args.implyLeading ?? false,
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(top: 50),
-          ),
-          Container(
-            constraints: const BoxConstraints(maxWidth: 200),
-            child: Row(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Personal Data'),
+          automaticallyImplyLeading: args.implyLeading ?? false,
+        ),
+        body: Form(
+            key: _formkey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            child: ListView(
               children: <Widget>[
-                const Spacer(),
-                Radio<GenderCharacter>(
-                  value: GenderCharacter.male,
-                  groupValue: _sex,
-                  onChanged: (GenderCharacter value) {
+                Container(
+                  margin: const EdgeInsets.only(top: 50),
+                ),
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 200),
+                  child: Row(
+                    children: <Widget>[
+                      const Spacer(),
+                      Radio<GenderCharacter>(
+                        value: GenderCharacter.male,
+                        groupValue: _sex,
+                        onChanged: (GenderCharacter value) {
+                          setState(() {
+                            _sex = value;
+                          });
+                        },
+                      ),
+                      const Text('Male', style: TextStyle(fontSize: 16)),
+                      Radio<GenderCharacter>(
+                        value: GenderCharacter.female,
+                        groupValue: _sex,
+                        onChanged: (GenderCharacter value) {
+                          setState(() {
+                            _sex = value;
+                          });
+                        },
+                      ),
+                      const Text('Female', style: TextStyle(fontSize: 16)),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+                BorderDecoration(
+                  placeHolder: 'Age Year',
+                  validator: Validator.ageValidator,
+                  onChanged: (String age) {
                     setState(() {
-                      _sex = value;
+                      _age = int.parse(age);
                     });
                   },
                 ),
-                const Text('Male', style: TextStyle(fontSize: 16)),
-                Radio<GenderCharacter>(
-                  value: GenderCharacter.female,
-                  groupValue: _sex,
-                  onChanged: (GenderCharacter value) {
+                BorderDecoration(
+                  placeHolder: 'Height CM',
+                  validator: Validator.heightValidator,
+                  onChanged: (String height) {
                     setState(() {
-                      _sex = value;
+                      _height = double.parse(height);
                     });
                   },
                 ),
-                const Text('Female', style: TextStyle(fontSize: 16)),
-                const Spacer(),
+                BorderDecoration(
+                  placeHolder: 'Weight KG',
+                  validator: Validator.weightValidator,
+                  onChanged: (String weight) {
+                    setState(() {
+                      _weight = double.parse(weight);
+                    });
+                  },
+                ),
+                _buildDropDownList(
+                  index: _sportsLevel,
+                  list: _sportsLevelLabelLists,
+                  hint: 'Activity Level',
+                  onChanged: (dynamic newValue) {
+                    setState(() {
+                      _sportsLevel = newValue as int;
+                    });
+                  },
+                ),
+                _buildDropDownList(
+                  index: _weightStaging,
+                  list: _weightStagingList,
+                  hint: 'Weight Staging',
+                  onChanged: (dynamic newValue) {
+                    setState(() {
+                      _weightStaging = newValue as int;
+                    });
+                  },
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 30, right: 30),
+                  child: ButtonTheme(
+                    minWidth: 200,
+                    buttonColor: Colors.orange[400],
+                    child: RaisedButton(
+                      onPressed: () async {
+                        if (!_formkey.currentState.validate()) return;
+                        try {
+                          final int totalCalories = CaloriesCalculator(
+                                  activityLevel: _sportsLevel,
+                                  age: _age,
+                                  sex: _sex.index,
+                                  height: _height,
+                                  weight: _weight,
+                                  weightStaging: _weightStaging)
+                              .calculateTotalEnergy();
+                          await UserCollection()
+                              .addUserSettings(args.uid, <String, dynamic>{
+                            'age': _age,
+                            'sex': _sex.index,
+                            'height': _height,
+                            'weight': _weight,
+                            'weightStaging': _weightStaging,
+                            'sportsLevel': _sportsLevel,
+                            'totalCalories': totalCalories,
+                          });
+                          Navigator.pushNamed(context, HomeScreen.routeName);
+                        } catch (err) {
+                          Toast.showFailedMsg(context: context, message: 'err');
+                        }
+                      },
+                      child: const Text(
+                        'Calculate',
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      ),
+                    ),
+                  ),
+                )
               ],
-            ),
-          ),
-          BorderDecoration(
-            placeHolder: 'Age Year',
-            validator: (dynamic value) {
-              if (value.isEmpty as bool) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-            onChanged: (String age) {
-              setState(() {
-                _age = int.parse(age);
-              });
-            },
-          ),
-          BorderDecoration(
-            placeHolder: 'Height CM',
-            validator: (dynamic value) {
-              if (value.isEmpty as bool) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-            onChanged: (String height) {
-              setState(() {
-                _height = double.parse(height);
-              });
-            },
-          ),
-          BorderDecoration(
-            placeHolder: 'Weight KG',
-            validator: (dynamic value) {
-              if (value.isEmpty as bool) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-            onChanged: (String weight) {
-              setState(() {
-                _weight = double.parse(weight);
-              });
-            },
-          ),
-          _buildDropDownList(
-            index: _sportsLevel,
-            list: _sportsLevelLabelLists,
-            hint: 'Activity Level',
-            onChanged: (dynamic newValue) {
-              setState(() {
-                _sportsLevel = newValue as int;
-              });
-            },
-          ),
-          _buildDropDownList(
-            index: _weightStaging,
-            list: _weightStagingList,
-            hint: 'Weight Staging',
-            onChanged: (dynamic newValue) {
-              setState(() {
-                _weightStaging = newValue as int;
-              });
-            },
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: ButtonTheme(
-              minWidth: 200,
-              buttonColor: Colors.orange[400],
-              child: RaisedButton(
-                onPressed: () async {
-                  try {
-                    final int totalCalories = CaloriesCalculator(
-                            activityLevel: _sportsLevel,
-                            age: _age,
-                            sex: _sex.index,
-                            height: _height,
-                            weight: _weight,
-                            weightStaging: _weightStaging)
-                        .calculateTotalEnergy();
-                    await UserCollection()
-                        .addUserSettings(args.uid, <String, dynamic>{
-                      'age': _age,
-                      'sex': _sex.index,
-                      'height': _height,
-                      'weight': _weight,
-                      'weightStaging': _weightStaging,
-                      'sportsLevel': _sportsLevel,
-                      'totalCalories': totalCalories,
-                    });
-                    Navigator.pushNamed(context, HomeScreen.routeName);
-                  } catch (err) {
-                    Toast.showFailedMsg(context: context, message: 'err');
-                  }
-                },
-                child: const Text(
-                  'Calculate',
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+            )));
   }
 }
