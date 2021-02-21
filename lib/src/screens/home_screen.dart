@@ -7,7 +7,6 @@ import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/redux/states/user_state.dart';
 import 'package:fyp_dieta/src/screens/food_screen.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/record_collection.dart';
-import 'package:fyp_dieta/src/utils/firebase/firestore/user_collection.dart';
 import 'package:fyp_dieta/src/widgets/cards/calories_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/weight_info_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/food_card.dart';
@@ -21,8 +20,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<DocumentSnapshot> recordSnapshot;
-
   int suggestCalories({int index, int totalCalories}) {
     switch (index) {
       case 0:
@@ -86,6 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return StoreConnector<AppState, UserState>(
         converter: (Store<AppState> store) => store.state.userState,
         builder: (BuildContext context, UserState userState) {
+          if (userState.user == null) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
           final String uid = userState.user.uid;
           final Future<DocumentSnapshot> recordFuture =
               RecordCollection(uid: uid, date: currentDate)
@@ -111,122 +115,98 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               backgroundColor: Theme.of(context).primaryColorDark,
               body: FutureBuilder<DocumentSnapshot>(
-                  future: UserCollection().getUserSettings(uid: uid),
+                  future: recordFuture,
                   builder: (BuildContext context,
-                      AsyncSnapshot<dynamic> userSnapshot) {
-                    if (userSnapshot.hasError) {
-                      return const Text('Something went wrong');
+                      AsyncSnapshot<dynamic> recordSnapshot) {
+                    int sugar = 0;
+                    int protein = 0;
+                    int fat = 0;
+                    int breakfastCalories = 0;
+                    int lunchCalories = 0;
+                    int dinnerCalories = 0;
+                    int extraCalories = 0;
+                    int intakeCalories = 0;
+                    if (recordSnapshot.hasData &&
+                        recordSnapshot.data.data() != null) {
+                      final Map<String, dynamic> recordData =
+                          recordSnapshot.data.data() as Map<String, dynamic>;
+                      breakfastCalories =
+                          getCaloriesByType(data: recordData, mealType: 0);
+                      lunchCalories =
+                          getCaloriesByType(data: recordData, mealType: 1);
+                      dinnerCalories =
+                          getCaloriesByType(data: recordData, mealType: 2);
+                      extraCalories =
+                          getCaloriesByType(data: recordData, mealType: 3);
+                      intakeCalories = breakfastCalories +
+                          lunchCalories +
+                          dinnerCalories +
+                          extraCalories;
+                      final Map<String, int> nutrition =
+                          getNutrition(data: recordData);
+                      sugar = nutrition['sugar'];
+                      fat = nutrition['fat'];
+                      protein = nutrition['protein'];
                     }
-                    if (userSnapshot.connectionState == ConnectionState.done &&
-                        userSnapshot.data.data() != null) {
-                      final Map<String, dynamic> data =
-                          userSnapshot.data.data() as Map<String, dynamic>;
-                      return FutureBuilder<DocumentSnapshot>(
-                          future: recordFuture,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic> recordSnapshot) {
-                            int sugar = 0;
-                            int protein = 0;
-                            int fat = 0;
-                            int breakfastCalories = 0;
-                            int lunchCalories = 0;
-                            int dinnerCalories = 0;
-                            int extraCalories = 0;
-                            int intakeCalories = 0;
-                            if (recordSnapshot.hasData &&
-                                recordSnapshot.data.data() != null) {
-                              final Map<String, dynamic> recordData =
-                                  recordSnapshot.data.data()
-                                      as Map<String, dynamic>;
-
-                              breakfastCalories = getCaloriesByType(
-                                  data: recordData, mealType: 0);
-                              lunchCalories = getCaloriesByType(
-                                  data: recordData, mealType: 1);
-                              dinnerCalories = getCaloriesByType(
-                                  data: recordData, mealType: 2);
-                              extraCalories = getCaloriesByType(
-                                  data: recordData, mealType: 3);
-                              intakeCalories = breakfastCalories +
-                                  lunchCalories +
-                                  dinnerCalories +
-                                  extraCalories;
-                              final Map<String, int> nutrition =
-                                  getNutrition(data: recordData);
-                              sugar = nutrition['sugar'];
-                              fat = nutrition['fat'];
-                              protein = nutrition['protein'];
-                            } else {}
-                            return ListView(
-                              children: <Widget>[
-                                Column(children: <Widget>[
-                                  CaloriesCard(
-                                      totalCalories:
-                                          data['totalCalories'] as int,
-                                      intake: intakeCalories,
-                                      suagr: sugar,
-                                      protein: protein,
-                                      fat: fat,
-                                      uid: uid),
-                                  WeightInfoCard(
-                                    username: userState.user.displayName,
-                                    uid: uid,
-                                    weight: data['weight'],
-                                    weightStaging: data['weightStaging'] as int,
-                                  )
-                                ]),
-                                Row(
-                                  children: <Widget>[
-                                    FoodCard(
-                                      labelIndex: 0,
-                                      intakeCalories: breakfastCalories,
-                                      suggestCaloires: suggestCalories(
-                                        index: 0,
-                                        totalCalories:
-                                            data['totalCalories'] as int,
-                                      ),
-                                    ),
-                                    FoodCard(
-                                      labelIndex: 1,
-                                      intakeCalories: lunchCalories,
-                                      suggestCaloires: suggestCalories(
-                                        index: 1,
-                                        totalCalories:
-                                            data['totalCalories'] as int,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: <FoodCard>[
-                                    FoodCard(
-                                      labelIndex: 2,
-                                      intakeCalories: dinnerCalories,
-                                      suggestCaloires: suggestCalories(
-                                        index: 2,
-                                        totalCalories:
-                                            data['totalCalories'] as int,
-                                      ),
-                                    ),
-                                    FoodCard(
-                                      labelIndex: 3,
-                                      intakeCalories: extraCalories,
-                                      suggestCaloires: suggestCalories(
-                                        index: 3,
-                                        totalCalories:
-                                            data['totalCalories'] as int,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            );
-                          });
-                    }
-                    return const Scaffold(
-                        body: Center(
-                      child: CircularProgressIndicator(),
-                    ));
+                    return ListView(
+                      children: <Widget>[
+                        Column(children: <Widget>[
+                          CaloriesCard(
+                              totalCalories: userState.settings.totalCalories,
+                              intake: intakeCalories,
+                              suagr: sugar,
+                              protein: protein,
+                              fat: fat,
+                              uid: uid),
+                          WeightInfoCard(
+                            username: userState.user.displayName,
+                            uid: uid,
+                            weight: userState.settings.weight,
+                            weightStaging: userState.settings.weightStaging,
+                          )
+                        ]),
+                        Row(
+                          children: <Widget>[
+                            FoodCard(
+                              labelIndex: 0,
+                              intakeCalories: breakfastCalories,
+                              suggestCaloires: suggestCalories(
+                                index: 0,
+                                totalCalories: userState.settings.totalCalories,
+                              ),
+                            ),
+                            FoodCard(
+                              labelIndex: 1,
+                              intakeCalories: lunchCalories,
+                              suggestCaloires: suggestCalories(
+                                index: 1,
+                                totalCalories: userState.settings.totalCalories,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <FoodCard>[
+                            FoodCard(
+                              labelIndex: 2,
+                              intakeCalories: dinnerCalories,
+                              suggestCaloires: suggestCalories(
+                                index: 2,
+                                totalCalories: userState.settings.totalCalories,
+                              ),
+                            ),
+                            FoodCard(
+                              labelIndex: 3,
+                              intakeCalories: extraCalories,
+                              suggestCaloires: suggestCalories(
+                                index: 3,
+                                totalCalories: userState.settings.totalCalories,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    );
                   }));
         });
   }
