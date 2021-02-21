@@ -7,4 +7,18 @@ class DietCollection {
         .doc('low-calories')
         .get();
   }
+
+  static Future<DocumentSnapshot> getFitnessCaloriesDiets() async {
+    return FirebaseFirestore.instance
+        .collection('Diet')
+        .doc('fitness-diets')
+        .get();
+  }
+
+  static Future<DocumentSnapshot> getHealthyCaloriesDiets() async {
+    return FirebaseFirestore.instance
+        .collection('Diet')
+        .doc('healthy-diets')
+        .get();
+  }
 }
