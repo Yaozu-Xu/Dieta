@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-
+import 'package:fyp_dieta/src/utils/notification.dart';
 import 'package:fyp_dieta/src/redux/reducers/app_reducer.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/screens/collection_screen.dart';
@@ -20,6 +20,7 @@ Future<void> main() async {
   await DotEnv().load();
   final Store<AppState> store =
       Store<AppState>(appReducer, initialState: AppState.intital());
+  await Notifications.loadNotification();
   runApp(MyApp(store: store));
 }
 
