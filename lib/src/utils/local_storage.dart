@@ -61,3 +61,24 @@ Future<void> uploadYesterdayData(
     'consume': await getColoriesByDate(key: key)
   });
 }
+
+Future<void> setIosNotificationRights() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool('ios-notification', true);
+}
+
+Future<bool> hasIosNotificationRights() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('ios-notification') ?? false;
+}
+
+Future<bool> getDietNotifications() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('diet-notifications') ?? true;
+}
+
+Future<bool> setDietNotifications({@required bool value}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.setBool('diet-notifications', value);
+}
+
