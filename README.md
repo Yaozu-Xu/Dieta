@@ -1,22 +1,41 @@
 # Dieta
 
-A health diet app for controlling weight
+Dieta has the following features:
 
-# HomeScreen
+💻 Calories Counter
+🍜 Food Database
+📅 Daily Records
+🏃‍♀️ Steps Counter
+📈 Customized Diet Plans
+🔔 Sweet Notifications
 
-Show calories and weight information
+# Home Screen
 
-![][homepage]
+Display calories information
+
+<img src="./screenshots/home.png" width="300" height="600">
 
 
-# FoodScreen
+# Food Screen
 
-Search food by name from Nutritionix API
+Provide a full food-list by using NutritioniX API
 
-![][foodlist]
+<img src="./screenshots/foodlist.png" width="300" height="600">
 
-Make records of your meals
+<img src="./screenshots/record.png" width="300" height="600">
 
-[homepage]: ./screenshots/home.png
-[foodlist]: ./screenshots/foodlist.png
-[foodrecords]: ./screenshots/foodrecords.png
+
+# Diet Screen
+
+Recommend Diets
+
+<img src="./screenshots/diet1.png" width="300" height="600">
+
+<img src="./screenshots/diet2.png" width="300" height="600">
+
+# Settings Screen
+
+User Profile and Settings
+
+<img src="./screenshots/settings.png" width="300" height="600">
+
