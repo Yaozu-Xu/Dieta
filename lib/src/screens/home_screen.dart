@@ -167,41 +167,46 @@ class _HomeScreenState extends State<HomeScreen> {
                         ]),
                         Row(
                           children: <Widget>[
-                            FoodCard(
+                            Expanded(
+                                child: FoodCard(
                               labelIndex: 0,
                               intakeCalories: breakfastCalories,
                               suggestCaloires: suggestCalories(
                                 index: 0,
                                 totalCalories: userState.settings.totalCalories,
                               ),
-                            ),
-                            FoodCard(
+                            )),
+                            Expanded(
+                                child: FoodCard(
                               labelIndex: 1,
                               intakeCalories: lunchCalories,
                               suggestCaloires: suggestCalories(
                                 index: 1,
                                 totalCalories: userState.settings.totalCalories,
                               ),
-                            ),
+                            )),
                           ],
                         ),
                         Row(
-                          children: <FoodCard>[
-                            FoodCard(
+                          children: <Widget>[
+                            Expanded(
+                                child: FoodCard(
                               labelIndex: 2,
                               intakeCalories: dinnerCalories,
                               suggestCaloires: suggestCalories(
                                 index: 2,
                                 totalCalories: userState.settings.totalCalories,
                               ),
-                            ),
-                            FoodCard(
-                              labelIndex: 3,
-                              intakeCalories: extraCalories,
-                              suggestCaloires: suggestCalories(
-                                index: 3,
-                                totalCalories: userState.settings.totalCalories,
-                              ),
+                            )),
+                            Expanded(
+                              child: FoodCard(
+                                  labelIndex: 3,
+                                  intakeCalories: extraCalories,
+                                  suggestCaloires: suggestCalories(
+                                    index: 3,
+                                    totalCalories:
+                                        userState.settings.totalCalories,
+                                  )),
                             ),
                           ],
                         )

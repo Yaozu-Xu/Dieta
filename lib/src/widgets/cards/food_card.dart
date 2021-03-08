@@ -43,8 +43,8 @@ class _FoodCardState extends State<FoodCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: Card(
+    return 
+        Card(
       color: Theme.of(context).cardColor,
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: SizedBox(
@@ -85,6 +85,6 @@ class _FoodCardState extends State<FoodCard> {
           ],
         ),
       ),
-    ));
+    );
   }
 }
