@@ -29,7 +29,7 @@ class _StepCounterState extends State<StepCounter> {
         steps: currentSteps,
         uid: widget.uid);
     final int caloires = (steps * _factor).floor();
-    if (caloires > _currentCaloires) {
+    if (caloires > _currentCaloires || caloires == 0) {
       await setColoriesByDate(
           key: genCaloriesStorageKey(uid: widget.uid), calories: caloires);
       setState(() {
