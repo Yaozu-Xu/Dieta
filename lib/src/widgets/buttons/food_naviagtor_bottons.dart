@@ -12,9 +12,11 @@ class FoodNavigatorBottons extends StatelessWidget {
   ];
 
   Widget _buildText(BuildContext context, int mealType) {
-    Color textColor = Colors.grey[600];
+    Color textColor = Colors.white.withOpacity(0.4);
+    FontWeight weight = FontWeight.normal;
     if (mealType == currentSection) {
-      textColor = Colors.purple;
+      textColor = Colors.white.withOpacity(0.8);
+      weight = FontWeight.bold;
     }
     return Expanded(
         child: InkWell(
@@ -24,7 +26,7 @@ class FoodNavigatorBottons extends StatelessWidget {
       },
       child: Text(mealLabelList[mealType],
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 16, color: textColor)),
+          style: TextStyle(fontSize: 16, color: textColor, fontWeight: weight)),
     ));
   }
 

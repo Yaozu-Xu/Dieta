@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/redux/states/user_state.dart';
+import 'package:fyp_dieta/src/widgets/layouts/linear_gradient.dart';
 import 'package:fyp_dieta/src/widgets/layouts/user_stream_builder.dart';
 import 'package:fyp_dieta/src/widgets/buttons/bottom_buttons.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
@@ -195,7 +196,6 @@ class _UserScreenState extends State<UserScreen> {
   Widget _buildListItem(BuildContext context, Widget child) {
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 15, 0, 10),
-      color: Theme.of(context).cardColor,
       child: child,
     );
   }
@@ -203,7 +203,6 @@ class _UserScreenState extends State<UserScreen> {
   Widget _buildRowWitBtn({BuildContext context, IconData icon, Widget child}) {
     return Container(
         padding: const EdgeInsets.fromLTRB(15, 15, 0, 10),
-        color: Theme.of(context).cardColor,
         child: Row(
           children: <Widget>[
             Container(
@@ -224,7 +223,6 @@ class _UserScreenState extends State<UserScreen> {
       {BuildContext context, IconData icon, String label}) {
     return Container(
       padding: const EdgeInsets.fromLTRB(15, 15, 0, 10),
-      color: Theme.of(context).cardColor,
       child: Row(
         children: <Widget>[
           Container(
@@ -245,21 +243,19 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('User',
-              style: TextStyle(
-                  letterSpacing: 1.2,
-                  color: Colors.grey[200].withOpacity(0.4))),
+          title: Text('User', style: appBarStyle),
           backgroundColor: Theme.of(context).secondaryHeaderColor,
           automaticallyImplyLeading: false,
         ),
         bottomNavigationBar: const BottomButtons(2),
         backgroundColor: Theme.of(context).primaryColorDark,
-        body: UserStreamBuilder(
-            buildedWidget: StoreConnector<AppState, UserState>(
+        body: GradientContainer(
+            child: UserStreamBuilder(
+                buildedWidget: StoreConnector<AppState, UserState>(
           converter: (Store<AppState> store) => store.state.userState,
           builder: (BuildContext context, UserState userState) {
             return _buildMenuList(context, userState);
           },
-        )));
+        ))));
   }
 }

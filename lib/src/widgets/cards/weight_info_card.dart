@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
 import 'package:fyp_dieta/src/screens/user_screen.dart';
+import 'package:fyp_dieta/src/widgets/layouts/frosted_glass.dart';
 
 class WeightInfoCard extends StatefulWidget {
   const WeightInfoCard(
@@ -49,32 +50,28 @@ class _WeightInfoCardState extends State<WeightInfoCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        color: Theme.of(context).cardColor,
-        margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+    return FrostedGlass(
+        margin: const EdgeInsets.only(left: 10, top: 20, right: 10),
+        height: 120,
         child: Wrap(
           children: <Widget>[
             Row(
               children: <Widget>[
-                Expanded(
-                  child: Container(
+               Container(
                     margin: const EdgeInsets.fromLTRB(20, 20, 0, 20),
                     child: Text(
                       widget.username,
                       style: valueStyle.copyWith(fontSize: 18),
                     ),
                   ),
-                ),
+                const Spacer(),
                 Container(
                   margin: const EdgeInsets.only(right: 20),
-                  child: IconButton(
-                    icon: const Icon(Icons.calendar_today),
-                    color: Colors.grey[300],
-                    tooltip: 'Redesign your plan',
-                    onPressed: () {
-                      Navigator.pushNamed(context, UserScreen.routeName);
-                    },
-                  ),
+                  width: 30,
+                  child: GestureDetector( onTap: () {
+                    Navigator.of(context).pushNamed(UserScreen.routeName);
+                  }, child: 
+                  Icon(Icons.calendar_today, color: Colors.grey[200],) ) 
                 )
               ],
             ),

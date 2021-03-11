@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/redux/actions/food_action.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/redux/states/food_state.dart';
+import 'package:fyp_dieta/src/widgets/layouts/frosted_glass.dart';
 
 class SearchForm extends StatefulWidget {
   @override
@@ -38,11 +39,12 @@ class _SearchFormState extends State<SearchForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.only(left: 30, right: 30, top: 10),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: Colors.grey[300]),
-        child: Form(
+    return FrostedGlass(
+        height: 60,
+        opacity: 0.4,
+        margin: const EdgeInsets.only(left: 30, right: 30, top: 15),
+        borderRadius: BorderRadius.circular(20),
+        innerChild: Form(
             child: Row(children: <Widget>[
           Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
@@ -57,6 +59,7 @@ class _SearchFormState extends State<SearchForm> {
               enabledBorder: InputBorder.none,
               errorBorder: InputBorder.none,
               disabledBorder: InputBorder.none,
+              hintStyle: TextStyle(color: Colors.black)
             ),
             validator: (String value) {
               if (value.isEmpty) {

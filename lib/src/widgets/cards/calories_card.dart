@@ -1,6 +1,7 @@
 import 'package:fyp_dieta/src/assets/constants.dart';
 import 'package:fyp_dieta/src/widgets/common/step_counter.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp_dieta/src/widgets/layouts/frosted_glass.dart';
 
 class CaloriesCard extends StatefulWidget {
   const CaloriesCard(
@@ -85,8 +86,8 @@ class _CaloriesCardState extends State<CaloriesCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Theme.of(context).cardColor,
+    return FrostedGlass(
+      height: 270,
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: Wrap(
         children: <Widget>[

@@ -108,7 +108,8 @@ class SelectList extends StatelessWidget {
           } else {
             // is loading
             developer.log('loading');
-            renderedList = const Text('loading');
+            renderedList =
+                Text('loading', style: labelStyle.copyWith(fontSize: 16));
           }
           return renderedList;
         });

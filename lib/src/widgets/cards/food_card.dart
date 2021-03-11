@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
+import 'package:fyp_dieta/src/widgets/layouts/frosted_glass.dart';
 
 class FoodCard extends StatefulWidget {
   const FoodCard(
@@ -43,48 +44,46 @@ class _FoodCardState extends State<FoodCard> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-        Card(
-      color: Theme.of(context).cardColor,
-      margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-      child: SizedBox(
+    return FrostedGlass(
         height: 160,
-        child: Column(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.centerRight,
-              margin: const EdgeInsets.only(right: 10, top: 10),
-              child: Text(_labelList[widget.labelIndex], style: mealLabelStyle),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 20, bottom: 30),
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.grey[300].withOpacity(0.4),
-              ),
-              child: _iconList[widget.labelIndex],
-            ),
-            Expanded(
-                child: Column(children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.only(left: 20, bottom: 5),
-                child: Text(
-                  '${widget.intakeCalories} kcals',
-                  style: valueStyle.copyWith(fontSize: 14),
+        margin: const EdgeInsets.only(left: 10, top: 20, right: 10),
+        child: SizedBox(
+            height: 160,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.centerRight,
+                  margin: const EdgeInsets.only(right: 10, top: 10),
+                  child: Text(_labelList[widget.labelIndex],
+                      style: labelStyleBright),
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                margin: const EdgeInsets.only(left: 20),
-                child: Text('Suggest: ${widget.suggestCaloires}',
-                    style: labelStyle.copyWith(fontSize: 12)),
-              ),
-            ]))
-          ],
-        ),
-      ),
-    );
+                Container(
+                  margin: const EdgeInsets.only(top: 20, bottom: 30),
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.4),
+                  ),
+                  child: _iconList[widget.labelIndex],
+                ),
+                Expanded(
+                    child: Column(children: <Widget>[
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(left: 20, bottom: 5),
+                    child: Text(
+                      '${widget.intakeCalories} kcals',
+                      style: valueStyle.copyWith(fontSize: 14),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(left: 20),
+                    child: Text('Suggest: ${widget.suggestCaloires}',
+                        style: labelStyle.copyWith(fontSize: 12)),
+                  ),
+                ]))
+              ],
+            )));
   }
 }
