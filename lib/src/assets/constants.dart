@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 
 TextStyle labelStyle = TextStyle(
-    color: Colors.grey[300].withOpacity(0.4), fontWeight: FontWeight.bold);
-TextStyle valueStyle = TextStyle(
-    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[300]);
-TextStyle mealLabelStyle = TextStyle(
-  color: Colors.grey[300],
+    color: Colors.white.withOpacity(0.4), fontWeight: FontWeight.bold);
+
+TextStyle valueStyle = const TextStyle(
+    fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white);
+
+TextStyle labelStyleBright = TextStyle(
+  color: Colors.white.withOpacity(0.8),
   fontSize: 15,
+  fontWeight: FontWeight.bold,
   letterSpacing: 1.2,
 );
-TextStyle listLabelStyle = TextStyle(color: Colors.grey[300], fontSize: 18);
+
+TextStyle appBarStyle =
+    TextStyle(letterSpacing: 1.2, color: Colors.white.withOpacity(0.5));
+
+TextStyle listLabelStyle = TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 18);
 
 String currentDate = DateTime.now().toString().substring(0, 10);
 
