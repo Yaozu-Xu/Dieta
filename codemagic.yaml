@@ -1,4 +1,4 @@
-# Automatically generated on 2021-03-06 UTC from https://codemagic.io/app/5fd8cc0777de1aadbae36182/settings
+# Automatically generated on 2021-03-11 UTC from https://codemagic.io/app/5fd8cc0777de1aadbae36182/settings
 # Note that this configuration is not an exact match to UI settings. Review and adjust as necessary.
 
 workflows:
@@ -44,7 +44,6 @@ workflows:
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - cd . && flutter packages pub get
-      - cd . && flutter analyze
       - cd . && flutter test
       - "echo $FIREBASE_IOS | base64 --decode > $FCI_BUILD_DIR/ios/Runner/GoogleService-Info.plist\n\
         \  \necho \"\\nListing iOS Directory to confirm the GoogleService-Info.plist\
