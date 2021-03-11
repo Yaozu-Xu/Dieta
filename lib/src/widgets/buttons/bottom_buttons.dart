@@ -30,6 +30,7 @@ class _BottomButtonsState extends State<BottomButtons> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(icon: Icon(Icons.event_note), label: 'Record'),
         BottomNavigationBarItem(icon: Icon(Icons.restaurant), label: 'Diet'),
@@ -37,8 +38,8 @@ class _BottomButtonsState extends State<BottomButtons> {
       ],
       backgroundColor: Theme.of(context).bottomAppBarColor,
       currentIndex: widget._currentIndex,
-      selectedItemColor: Colors.grey[200].withOpacity(0.9),
-      unselectedItemColor: Colors.grey[200].withOpacity(0.4),
+      selectedItemColor: Colors.white.withOpacity(0.9),
+      unselectedItemColor: Colors.white.withOpacity(0.4),
       onTap: _onItemTapped,
     );
   }

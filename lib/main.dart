@@ -48,10 +48,10 @@ class MyApp extends StatelessWidget {
                   title: 'Flutter Demo',
                   theme: ThemeData(
                     primaryColorDark: const Color(0xff37415E),
-                    cardColor: const Color(0xff535D80),
+                    primaryColorLight: const Color(0xff6BEEAA),
                     buttonColor: const Color(0xffAF7DDE),
-                    bottomAppBarColor: const Color(0xff252F4A),
-                    secondaryHeaderColor: const Color(0xff252F4A),
+                    bottomAppBarColor: const Color(0xffb978c8),
+                    secondaryHeaderColor: const Color(0xff624ac3),
                   ),
                   routes: <String, WidgetBuilder>{
                     HomeScreen.routeName: (BuildContext context) =>

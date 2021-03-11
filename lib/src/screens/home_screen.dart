@@ -11,6 +11,7 @@ import 'package:fyp_dieta/src/widgets/cards/calories_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/weight_info_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/food_card.dart';
 import 'package:fyp_dieta/src/widgets/buttons/bottom_buttons.dart';
+import 'package:fyp_dieta/src/widgets/layouts/linear_gradient.dart';
 import 'package:redux/redux.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -95,26 +96,24 @@ class _HomeScreenState extends State<HomeScreen> {
               RecordCollection(uid: uid, date: currentDate)
                   .getAllRecordsByDate();
           return Scaffold(
-              appBar: AppBar(
-                centerTitle: true,
-                title: Text('Record',
-                    style: TextStyle(
-                        letterSpacing: 1.2,
-                        color: Colors.grey[200].withOpacity(0.4))),
-                backgroundColor: Theme.of(context).secondaryHeaderColor,
-                automaticallyImplyLeading: false,
-              ),
-              bottomNavigationBar: const BottomButtons(0),
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: Theme.of(context).buttonColor,
-                onPressed: () {
-                  Navigator.pushNamed(context, FoodScreen.routeName,
-                      arguments: FoodScreenArguments(mealType: 0));
-                },
-                child: const Icon(Icons.add),
-              ),
-              backgroundColor: Theme.of(context).primaryColorDark,
-              body: FutureBuilder<DocumentSnapshot>(
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text('Record',
+                  style: appBarStyle),
+              backgroundColor: Theme.of(context).secondaryHeaderColor,
+              automaticallyImplyLeading: false,
+            ),
+            bottomNavigationBar: const BottomButtons(0),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).buttonColor,
+              onPressed: () {
+                Navigator.pushNamed(context, FoodScreen.routeName,
+                    arguments: FoodScreenArguments(mealType: 0));
+              },
+              child: const Icon(Icons.add),
+            ),
+            body: GradientContainer(
+              child: FutureBuilder<DocumentSnapshot>(
                   future: recordFuture,
                   builder: (BuildContext context,
                       AsyncSnapshot<dynamic> recordSnapshot) {
@@ -167,47 +166,54 @@ class _HomeScreenState extends State<HomeScreen> {
                         ]),
                         Row(
                           children: <Widget>[
-                            FoodCard(
+                            Expanded(
+                                child: FoodCard(
                               labelIndex: 0,
                               intakeCalories: breakfastCalories,
                               suggestCaloires: suggestCalories(
                                 index: 0,
                                 totalCalories: userState.settings.totalCalories,
                               ),
-                            ),
-                            FoodCard(
+                            )),
+                            Expanded(
+                                child: FoodCard(
                               labelIndex: 1,
                               intakeCalories: lunchCalories,
                               suggestCaloires: suggestCalories(
                                 index: 1,
                                 totalCalories: userState.settings.totalCalories,
                               ),
-                            ),
+                            )),
                           ],
                         ),
                         Row(
-                          children: <FoodCard>[
-                            FoodCard(
+                          children: <Widget>[
+                            Expanded(
+                                child: FoodCard(
                               labelIndex: 2,
                               intakeCalories: dinnerCalories,
                               suggestCaloires: suggestCalories(
                                 index: 2,
                                 totalCalories: userState.settings.totalCalories,
                               ),
-                            ),
-                            FoodCard(
-                              labelIndex: 3,
-                              intakeCalories: extraCalories,
-                              suggestCaloires: suggestCalories(
-                                index: 3,
-                                totalCalories: userState.settings.totalCalories,
-                              ),
+                            )),
+                            Expanded(
+                              child: FoodCard(
+                                  labelIndex: 3,
+                                  intakeCalories: extraCalories,
+                                  suggestCaloires: suggestCalories(
+                                    index: 3,
+                                    totalCalories:
+                                        userState.settings.totalCalories,
+                                  )),
                             ),
                           ],
                         )
                       ],
                     );
-                  }));
+                  }),
+            ),
+          );
         });
   }
 }

@@ -20,18 +20,14 @@ Display calories information
 
 Provide a full food-list by using NutritioniX API
 
-<img src="./screenshots/foodlist.png" width="300" height="600">
-
-<img src="./screenshots/record.png" width="300" height="600">
-
+<img src="./screenshots/food.png" width="300" height="600">
 
 # Diet Screen
 
 Recommend Diets
 
-<img src="./screenshots/diet1.png" width="300" height="600">
+<img src="./screenshots/diet.png" width="300" height="600">
 
-<img src="./screenshots/diet2.png" width="300" height="600">
 
 # Settings Screen
 

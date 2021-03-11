@@ -17,7 +17,6 @@ class DietCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.all(20),
-      color: Colors.white,
       child: Column(children: <Widget>[
         Container(
             margin: const EdgeInsets.all(20),

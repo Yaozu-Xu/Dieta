@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
+import 'package:fyp_dieta/src/redux/actions/food_action.dart';
 import 'package:fyp_dieta/src/redux/states/app_state.dart';
+import 'package:fyp_dieta/src/redux/states/food_state.dart';
 import 'package:fyp_dieta/src/requests/food_request.dart';
 import 'package:fyp_dieta/src/screens/home_screen.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/record_collection.dart';
@@ -10,6 +12,7 @@ import 'package:fyp_dieta/src/widgets/buttons/floating_buttons.dart';
 import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/search_form.dart';
 import 'package:fyp_dieta/src/widgets/buttons/food_naviagtor_bottons.dart';
+import 'package:fyp_dieta/src/widgets/layouts/linear_gradient.dart';
 import 'package:fyp_dieta/src/widgets/layouts/select_list.dart';
 import 'package:redux/redux.dart';
 
@@ -59,14 +62,17 @@ class _FoodScreenState extends State<FoodScreen> {
 
   Widget _renderSelectList({AppState state, int mealType}) {
     final String searchText = state.foodState.search;
-    if (searchText != null) {
+    if (searchText.isNotEmpty) {
       return Expanded(
           child: SelectList(
               foodResponse: fetchFood(searchText),
               uid: state.userState.user.uid,
               mealType: mealType));
     }
-    return const Text('Please search food');
+    return Text(
+      'Please search food',
+      style: labelStyle.copyWith(fontSize: 16),
+    );
   }
 
   Widget _buildListView({String uid}) {
@@ -74,7 +80,7 @@ class _FoodScreenState extends State<FoodScreen> {
       return ListView(
         padding: EdgeInsets.zero,
         children: const <Widget>[
-           ListTile(
+          ListTile(
             title: Text('Have no records yet ...',
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16)),
           ),
@@ -125,19 +131,22 @@ class _FoodScreenState extends State<FoodScreen> {
               appBar: AppBar(
                   centerTitle: true,
                   leading: IconButton(
-                      icon: const Icon(
-                        Icons.keyboard_backspace,
-                        size: 28,
-                        color: Colors.white,
+                      icon: Icon(
+                        Icons.chevron_left,
+                        size: 34,
+                        color: Colors.white.withOpacity(0.5),
                       ),
                       onPressed: () {
                         Navigator.pushNamed(context, HomeScreen.routeName);
+                        StoreProvider.of<AppState>(context)
+                            .dispatch(SetFoodAction(FoodState(
+                          search: '',
+                        )));
                       }),
-                  title: Text(mealLabelList[args.mealType],
-                      style: TextStyle(
-                          letterSpacing: 1.2, color: Colors.grey[200])),
-                  backgroundColor: Theme.of(context).buttonColor,
-                  iconTheme: IconThemeData(color: Colors.grey[200])),
+                  title: Text(mealLabelList[args.mealType], style: appBarStyle),
+                  backgroundColor: Theme.of(context).secondaryHeaderColor,
+                  iconTheme:
+                      IconThemeData(color: Colors.white.withOpacity(0.5))),
               floatingActionButton: MealIconFloatingButton(
                   mealType: args.mealType,
                   callback: setRecordData,
@@ -169,12 +178,13 @@ class _FoodScreenState extends State<FoodScreen> {
                       ],
                     ),
                   )),
-              body: Column(children: <Widget>[
+              body: GradientContainer(
+                  child: Column(children: <Widget>[
                 SearchForm(),
                 FoodNavigatorBottons(currentSection: args.mealType),
                 const Divider(thickness: 2),
                 _renderSelectList(state: appState, mealType: args.mealType),
-              ]));
+              ])));
         });
   }
 }
