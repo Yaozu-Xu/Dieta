@@ -47,6 +47,7 @@ dependencies:
   flutter_icons: ^1.1.0
 
 dev_dependencies:
+  test: ^1.15.7
   integration_test: ^1.0.2+2
   flutter_test:
     sdk: flutter
