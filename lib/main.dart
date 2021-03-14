@@ -21,11 +21,11 @@ Future<void> main() async {
   final Store<AppState> store =
       Store<AppState>(appReducer, initialState: AppState.intital());
   await Notifications.loadNotification();
-  runApp(MyApp(store: store));
+  runApp(Dieta(store: store));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key key, this.store}) : super(key: key);
+class Dieta extends StatelessWidget {
+  Dieta({Key key, this.store}) : super(key: key);
 
   final Store<AppState> store;
   final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               } else if (snapShot.hasData) {
                 // firebase load successfully
                 return MaterialApp(
-                  title: 'Flutter Demo',
+                  title: 'Dieta',
                   theme: ThemeData(
                     primaryColorDark: const Color(0xff37415E),
                     primaryColorLight: const Color(0xff6BEEAA),
