@@ -9,8 +9,8 @@ Future<void> main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   await DotEnv().load();
   group('Login Screen', () {
-    
-    testWidgets('Fail at login with invalid email', (WidgetTester tester) async {
+    testWidgets('Fail at login with invalid email',
+        (WidgetTester tester) async {
       app.main();
       await tester.pumpAndSettle();
       final Finder loginInputs = find.byType(LoginInputDecration);
@@ -28,9 +28,9 @@ Future<void> main() async {
       await tester.pumpAndSettle();
       final Finder loginInputs = find.byType(LoginInputDecration);
       final Finder btn = find.byType(OutlineButton);
-      final String testEmail = DotEnv().env['TEST_EMAIL'];
-      final String testPwd = DotEnv().env['TEST_PWD'];
-      await tester.enterText(loginInputs.first,testEmail);
+      final String testEmail = DotEnv().env['TEST_EMAIL'] ?? '';
+      final String testPwd = DotEnv().env['TEST_PWD'] ?? '';
+      await tester.enterText(loginInputs.first, testEmail);
       await tester.enterText(loginInputs.last, testPwd);
       await tester.tap(btn);
       await tester.pump(const Duration(milliseconds: 100));
