@@ -8,6 +8,7 @@ void main() {
   group('Card widgets testing', () {
     testWidgets('Load Calories Card with correct labels', (WidgetTester tester) async {
       await tester.pumpWidget(createMockApp(const CaloriesCard(
+          weightStaging: 0,
           totalCalories: 1000,
           intake: 100,
           uid: 'tester',
