@@ -68,13 +68,13 @@ class SelectList extends StatelessWidget {
                           tooltip: 'Add to record',
                           onPressed: () async {
                             final int calories =
-                                foodFields.nfCalories.round() as int;
+                                (foodFields.nfCalories ?? 0).round() as int;
                             final int protein =
-                                foodFields.nfProtein.round() as int;
+                                (foodFields.nfProtein ?? 0).round() as int;
                             final int fat =
-                                foodFields.nfTotalFat.round() as int;
+                                (foodFields.nfTotalFat ?? 0).round() as int;
                             final int suagrs =
-                                foodFields.nfSugars.round() as int;
+                                (foodFields.nfSugars ?? 0).round() as int;
                             try {
                               await RecordCollection(
                                       uid: uid, date: currentDate)
