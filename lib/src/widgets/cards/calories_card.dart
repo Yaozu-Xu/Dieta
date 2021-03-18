@@ -10,9 +10,11 @@ class CaloriesCard extends StatefulWidget {
       @required this.uid,
       @required this.suagr,
       @required this.fat,
+      @required this.weightStaging,
       @required this.protein});
 
   final int totalCalories;
+  final int weightStaging;
   final int intake;
   final int suagr;
   final int protein;
@@ -23,11 +25,24 @@ class CaloriesCard extends StatefulWidget {
   _CaloriesCardState createState() => _CaloriesCardState();
 }
 
+class Protion {
+  const Protion(
+      {@required this.carb, @required this.protein, @required this.fat});
+  final double carb;
+  final double protein;
+  final double fat;
+}
+
 class _CaloriesCardState extends State<CaloriesCard> {
   final String leftColumnLabel = 'Intake';
   final Color brightPink = const Color(0xffff6ba0);
   final Color brightOrange = const Color(0xffffca28);
   final Color brightGreen = const Color(0xff76ff03);
+  final List<Protion> protionList = <Protion>[
+    const Protion(carb: 0.45, protein: 0.3, fat: 0.25),
+    const Protion(carb: 0.55, protein: 0.15, fat: 0.3),
+    const Protion(carb: 0.6, protein: 0.2, fat: 0.2),
+  ];
 
   String _leftColumnValue() {
     return widget.intake != null ? widget.intake.toString() : '0';
@@ -70,18 +85,29 @@ class _CaloriesCardState extends State<CaloriesCard> {
   }
 
   Widget _buildNutritionRow() {
+    final Protion protion = protionList[widget.weightStaging];
+    final double totalCarb = protion.carb * widget.totalCalories / 4;
+    final double totalProtein = protion.protein * widget.totalCalories / 4;
+    final double totalFat = protion.fat * widget.totalCalories / 9;
     return Row(children: <Widget>[
       Expanded(
-        child: _buildNutritionColumn(
-            'Carb', widget.suagr.toString(), brightPink, .1),
+        child: _buildNutritionColumn('Carb', widget.suagr.toString(),
+            brightPink, progressBarValue(widget.suagr / totalCarb)),
       ),
       Expanded(
-          child: _buildNutritionColumn(
-              'Protein', widget.protein.toString(), brightOrange, .2)),
+          child: _buildNutritionColumn('Protein', widget.protein.toString(),
+              brightOrange, progressBarValue(widget.protein / totalProtein))),
       Expanded(
-          child: _buildNutritionColumn(
-              'Fat', widget.fat.toString(), brightGreen, .4)),
+          child: _buildNutritionColumn('Fat', widget.fat.toString(),
+              brightGreen, progressBarValue(widget.fat / totalFat))),
     ]);
+  }
+
+  double progressBarValue(double v) {
+    if (v == 0) {
+      return .1;
+    }
+    return v;
   }
 
   @override
@@ -103,7 +129,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
                       width: 80,
                     ),
                     child: CircularProgressIndicator(
-                      value: .8,
+                      value: widget.intake / widget.totalCalories,
                       strokeWidth: 5,
                       backgroundColor: Colors.grey[300],
                       valueColor:

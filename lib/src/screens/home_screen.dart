@@ -151,6 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         Column(children: <Widget>[
                           CaloriesCard(
+                              weightStaging: userState.settings.weightStaging,
                               totalCalories: userState.settings.totalCalories,
                               intake: intakeCalories,
                               suagr: sugar,

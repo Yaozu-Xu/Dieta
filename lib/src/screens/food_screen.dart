@@ -61,7 +61,7 @@ class _FoodScreenState extends State<FoodScreen> {
   }
 
   Widget _renderSelectList({AppState state, int mealType}) {
-    final String searchText = state.foodState.search;
+    final String searchText = state.foodState.search ?? '';
     if (searchText.isNotEmpty) {
       return Expanded(
           child: SelectList(
