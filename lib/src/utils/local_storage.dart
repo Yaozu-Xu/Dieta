@@ -20,14 +20,14 @@ Future<void> initUserStorage(BuildContext context, String uid) async {
 Future<int> getStepsByDate(
     {@required String key, @required int steps, @required String uid}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final int initialSteps = prefs.getInt(key);
-  if (initialSteps == null) {
+  final int initialSteps = prefs.getInt(key) ?? 0;
+  if (initialSteps == 0) {
     prefs.setInt(key, steps);
     // date is note updated
     if (prefs.getString('today') != key) {
-      final String keyOfYesterday = prefs.getString('today');
+      final String keyOfYesterday = prefs.getString('today') ?? '';
       // upload yesterday data
-      if (keyOfYesterday != null) {
+      if (keyOfYesterday.isEmpty) {
         await uploadYesterdayData(key: keyOfYesterday, uid: uid, steps: steps);
       }
     }
@@ -39,8 +39,8 @@ Future<int> getStepsByDate(
 
 Future<int> getColoriesByDate({@required String key}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final int calories = prefs.getInt(key);
-  if (calories == null) {
+  final int calories = prefs.getInt(key) ?? 0;
+  if (calories == 0) {
     prefs.setInt(key, 0);
     return 0;
   }
