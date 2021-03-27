@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
-import 'package:fyp_dieta/src/screens/user_screen.dart';
+import 'package:fyp_dieta/src/screens/history_screen.dart';
 import 'package:fyp_dieta/src/widgets/layouts/frosted_glass.dart';
 
 class WeightInfoCard extends StatefulWidget {
@@ -57,22 +57,26 @@ class _WeightInfoCardState extends State<WeightInfoCard> {
           children: <Widget>[
             Row(
               children: <Widget>[
-               Container(
-                    margin: const EdgeInsets.fromLTRB(20, 20, 0, 20),
-                    child: Text(
-                      widget.username,
-                      style: valueStyle.copyWith(fontSize: 18),
-                    ),
+                Container(
+                  margin: const EdgeInsets.fromLTRB(20, 20, 0, 20),
+                  child: Text(
+                    widget.username,
+                    style: valueStyle.copyWith(fontSize: 18),
                   ),
+                ),
                 const Spacer(),
                 Container(
-                  margin: const EdgeInsets.only(right: 20),
-                  width: 30,
-                  child: GestureDetector( onTap: () {
-                    Navigator.of(context).pushNamed(UserScreen.routeName);
-                  }, child: 
-                  Icon(Icons.calendar_today, color: Colors.grey[200],) ) 
-                )
+                    margin: const EdgeInsets.only(right: 20),
+                    width: 30,
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(
+                              HistoryScreen.routeName, arguments: HistoryScreenArguments(uid: widget.uid));
+                        },
+                        child: Icon(
+                          Icons.calendar_today,
+                          color: Colors.grey[200],
+                        )))
               ],
             ),
             Row(

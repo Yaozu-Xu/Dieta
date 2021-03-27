@@ -2,6 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fyp_dieta/src/assets/constants.dart';
+import 'package:fyp_dieta/src/screens/history_screen.dart';
+import 'package:fyp_dieta/src/utils/local_storage.dart';
 import 'package:redux/redux.dart';
 import 'package:fyp_dieta/src/utils/notification.dart';
 import 'package:fyp_dieta/src/redux/reducers/app_reducer.dart';
@@ -21,7 +24,14 @@ Future<void> main() async {
   final Store<AppState> store =
       Store<AppState>(appReducer, initialState: AppState.intital());
   await Notifications.loadNotification();
+  await initTimeStamp();
   runApp(Dieta(store: store));
+}
+
+Future<void> initTimeStamp() async {
+  if(await getCurrentDate() != currentDate){
+    setCurrentDate(date: currentDate);
+  }
 }
 
 class Dieta extends StatelessWidget {
@@ -68,6 +78,8 @@ class Dieta extends StatelessWidget {
                         SignUpScreen(),
                     UserScreen.routeName: (BuildContext context) =>
                         UserScreen(),
+                    HistoryScreen.routeName: (BuildContext context) =>
+                        HistoryScreen()
                   },
                 );
               } else {
