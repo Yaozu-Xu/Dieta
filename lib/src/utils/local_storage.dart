@@ -27,7 +27,7 @@ Future<int> getStepsByDate(
     if (prefs.getString('today') != key) {
       final String keyOfYesterday = prefs.getString('today') ?? '';
       // upload yesterday data
-      if (keyOfYesterday.isEmpty) {
+      if (keyOfYesterday.isNotEmpty) {
         await uploadYesterdayData(key: keyOfYesterday, uid: uid, steps: steps);
       }
     }
@@ -35,6 +35,7 @@ Future<int> getStepsByDate(
     return 0;
   }
   return steps - initialSteps;
+  
 }
 
 Future<int> getColoriesByDate({@required String key}) async {
@@ -65,6 +66,16 @@ Future<void> uploadYesterdayData(
 Future<void> setIosNotificationRights() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setBool('ios-notification', true);
+}
+
+Future<void> setCurrentDate({@required String date}) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('current-date', date);
+}
+
+Future<String> getCurrentDate() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('current-date');
 }
 
 Future<bool> hasIosNotificationRights() async {
