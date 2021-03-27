@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
 import 'package:fyp_dieta/src/model/food_model.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/record_collection.dart';
+import 'package:fyp_dieta/src/utils/local_storage.dart';
 import 'package:fyp_dieta/src/widgets/common/toast.dart';
 
 class SelectList extends StatelessWidget {
@@ -77,7 +78,8 @@ class SelectList extends StatelessWidget {
                                 (foodFields.nfSugars ?? 0).round() as int;
                             try {
                               await RecordCollection(
-                                      uid: uid, date: currentDate)
+                                      uid: uid, date: await getCurrentDate()
+                                      )
                                   .pushFoodRecord(<String, dynamic>{
                                 'calories': calories,
                                 'protein': protein,

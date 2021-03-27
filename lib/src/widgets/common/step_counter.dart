@@ -46,7 +46,7 @@ class _StepCounterState extends State<StepCounter> {
     _stepCountStream = Pedometer.stepCountStream;
     _stepCountStream.listen(onStepCount).onError(onStepCountError);
     final int calories =
-        await getColoriesByDate(key: genStepsStorageKey(uid: widget.uid));
+        await getColoriesByDate(key: genCaloriesStorageKey(uid: widget.uid));
     setState(() {
       _currentCaloires = calories;
     });

@@ -8,6 +8,7 @@ import 'package:fyp_dieta/src/redux/states/food_state.dart';
 import 'package:fyp_dieta/src/requests/food_request.dart';
 import 'package:fyp_dieta/src/screens/home_screen.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/record_collection.dart';
+import 'package:fyp_dieta/src/utils/local_storage.dart';
 import 'package:fyp_dieta/src/widgets/buttons/floating_buttons.dart';
 import 'package:fyp_dieta/src/widgets/common/toast.dart';
 import 'package:fyp_dieta/src/widgets/inputs/search_form.dart';
@@ -40,7 +41,7 @@ class _FoodScreenState extends State<FoodScreen> {
   Future<void> setRecordData(String uid, int mealType) async {
     try {
       final DocumentSnapshot recordSnapshot =
-          await RecordCollection(uid: uid, date: currentDate)
+          await RecordCollection(uid: uid, date: await getCurrentDate())
               .getAllRecordsByDate();
       if (recordSnapshot.data() != null &&
           recordSnapshot.data().containsKey('food')) {
@@ -97,7 +98,7 @@ class _FoodScreenState extends State<FoodScreen> {
                 icon: const Icon(Icons.remove_circle),
                 onPressed: () async {
                   try {
-                    await RecordCollection(uid: uid, date: currentDate)
+                    await RecordCollection(uid: uid, date: await getCurrentDate())
                         .removeFoodRecord(
                             mealList[index] as Map<String, dynamic>);
                     Toast.showSuccessMsg(message: 'success', context: context);

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RecordCollection {
-  RecordCollection({@required this.uid, @required this.date}) {
+  RecordCollection({@required this.uid, this.date}) {
     record = FirebaseFirestore.instance
         .collection('User')
         .doc(uid)
