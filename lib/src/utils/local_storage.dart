@@ -21,21 +21,23 @@ Future<int> getStepsByDate(
     {@required String key, @required int steps, @required String uid}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final int initialSteps = prefs.getInt(key) ?? 0;
+      
   if (initialSteps == 0) {
     prefs.setInt(key, steps);
     // date is note updated
     if (prefs.getString('today') != key) {
       final String keyOfYesterday = prefs.getString('today') ?? '';
+      final  List<String> l = keyOfYesterday.split('-');
+      final String dateKey = '${l[1]}-${l[2]}-${l[3]}';
       // upload yesterday data
       if (keyOfYesterday.isNotEmpty) {
-        await uploadYesterdayData(key: keyOfYesterday, uid: uid, steps: steps);
+        await uploadYesterdayData(date: dateKey, uid: uid, steps: steps);
       }
     }
     prefs.setString('today', key);
     return 0;
   }
   return steps - initialSteps;
-  
 }
 
 Future<int> getColoriesByDate({@required String key}) async {
@@ -55,11 +57,13 @@ Future<void> setColoriesByDate(
 }
 
 Future<void> uploadYesterdayData(
-    {@required String uid, @required String key, @required int steps}) async {
-  await RecordCollection(uid: uid, date: key)
+    {@required String uid, @required String date, @required int steps}) async {
+  await RecordCollection(uid: uid, date: date)
       .updateCaloriesRecord(<String, dynamic>{
-    'steps': steps,
-    'consume': await getColoriesByDate(key: key)
+    'sports': <String, dynamic>{
+      'steps': steps,
+      'consume': await getColoriesByDate(key: date)
+    }
   });
 }
 
@@ -92,4 +96,3 @@ Future<bool> setDietNotifications({@required bool value}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.setBool('diet-notifications', value);
 }
-
