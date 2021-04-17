@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_dieta/src/assets/constants.dart';
 import 'package:fyp_dieta/src/model/food_model.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/record_collection.dart';
+import 'package:fyp_dieta/src/utils/local_storage.dart';
 import 'package:fyp_dieta/src/widgets/common/toast.dart';
 
 class SelectList extends StatelessWidget {
@@ -68,16 +69,17 @@ class SelectList extends StatelessWidget {
                           tooltip: 'Add to record',
                           onPressed: () async {
                             final int calories =
-                                foodFields.nfCalories.round() as int;
+                                (foodFields.nfCalories ?? 0).round() as int;
                             final int protein =
-                                foodFields.nfProtein.round() as int;
+                                (foodFields.nfProtein ?? 0).round() as int;
                             final int fat =
-                                foodFields.nfTotalFat.round() as int;
+                                (foodFields.nfTotalFat ?? 0).round() as int;
                             final int suagrs =
-                                foodFields.nfSugars.round() as int;
+                                (foodFields.nfSugars ?? 0).round() as int;
                             try {
                               await RecordCollection(
-                                      uid: uid, date: currentDate)
+                                      uid: uid, date: await getCurrentDate()
+                                      )
                                   .pushFoodRecord(<String, dynamic>{
                                 'calories': calories,
                                 'protein': protein,

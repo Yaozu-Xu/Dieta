@@ -7,6 +7,7 @@ import 'package:fyp_dieta/src/redux/states/app_state.dart';
 import 'package:fyp_dieta/src/redux/states/user_state.dart';
 import 'package:fyp_dieta/src/screens/food_screen.dart';
 import 'package:fyp_dieta/src/utils/firebase/firestore/record_collection.dart';
+import 'package:fyp_dieta/src/utils/local_storage.dart';
 import 'package:fyp_dieta/src/widgets/cards/calories_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/weight_info_card.dart';
 import 'package:fyp_dieta/src/widgets/cards/food_card.dart';
@@ -79,6 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return nutrition;
   }
 
+  Future<DocumentSnapshot> fetchRecords({@required String uid}) async {
+    return RecordCollection(uid: uid, date: await getCurrentDate())
+        .getAllRecordsByDate();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, UserState>(
@@ -92,14 +98,10 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           final String uid = userState.user.uid;
-          final Future<DocumentSnapshot> recordFuture =
-              RecordCollection(uid: uid, date: currentDate)
-                  .getAllRecordsByDate();
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text('Record',
-                  style: appBarStyle),
+              title: Text('Record', style: appBarStyle),
               backgroundColor: Theme.of(context).secondaryHeaderColor,
               automaticallyImplyLeading: false,
             ),
@@ -114,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             body: GradientContainer(
               child: FutureBuilder<DocumentSnapshot>(
-                  future: recordFuture,
+                  future: fetchRecords(uid: userState.user.uid),
                   builder: (BuildContext context,
                       AsyncSnapshot<dynamic> recordSnapshot) {
                     int sugar = 0;
@@ -151,6 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: <Widget>[
                         Column(children: <Widget>[
                           CaloriesCard(
+                              weightStaging: userState.settings.weightStaging,
                               totalCalories: userState.settings.totalCalories,
                               intake: intakeCalories,
                               suagr: sugar,
