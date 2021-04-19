@@ -244,6 +244,7 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('User', style: appBarStyle),
+          centerTitle: true,
           backgroundColor: Theme.of(context).secondaryHeaderColor,
           automaticallyImplyLeading: false,
         ),

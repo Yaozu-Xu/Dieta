@@ -89,7 +89,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   events[_format.parse(e.id)] = <RecordMap>[
                     RecordMap(
                         hasFoodRecord: e.data().containsKey('food'),
-                        hasStepsRecord: e.data().containsKey('steps'))
+                        hasStepsRecord: e.data().containsKey('sports'))
                   ];
                 }
                 // calculate diets and sports in this month
