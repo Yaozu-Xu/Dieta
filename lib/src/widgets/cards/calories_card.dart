@@ -11,10 +11,12 @@ class CaloriesCard extends StatefulWidget {
       @required this.suagr,
       @required this.fat,
       @required this.weightStaging,
+      @required this.consume,
       @required this.protein});
 
   final int totalCalories;
   final int weightStaging;
+  final int consume;
   final int intake;
   final int suagr;
   final int protein;
@@ -110,6 +112,23 @@ class _CaloriesCardState extends State<CaloriesCard> {
     return v;
   }
 
+  Widget _consumeContainer() {
+    print(widget.consume);
+    if (widget.consume != 0) {
+      return SizedBox(
+        height: 200,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Text>[
+              Text(widget.consume.toString(), style: valueStyle),
+              Text('Consume', style: labelStyle),
+            ]),
+      );
+    } else {
+      return StepCounter(uid: widget.uid);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FrostedGlass(
@@ -146,7 +165,7 @@ class _CaloriesCardState extends State<CaloriesCard> {
                     )),
               ]),
             ),
-            Expanded(child: StepCounter(uid: widget.uid))
+            Expanded(child: _consumeContainer())
           ]),
           _buildNutritionRow(),
         ],

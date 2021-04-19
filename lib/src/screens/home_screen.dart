@@ -64,6 +64,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return calories;
   }
 
+  int getConsumeCalories({dynamic data}) {
+    int calories = 0;
+    if (data.containsKey('sports') as bool) {
+      calories = data['sports']['consume'] as int;
+    }
+    return calories;
+  }
+
   Map<String, int> getNutrition({Map<String, dynamic> data}) {
     final Map<String, int> nutrition = <String, int>{
       'sugar': 0,
@@ -127,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     int dinnerCalories = 0;
                     int extraCalories = 0;
                     int intakeCalories = 0;
+                    int consumeCalories = 0;
                     if (recordSnapshot.hasData &&
                         recordSnapshot.data.data() != null) {
                       final Map<String, dynamic> recordData =
@@ -139,6 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           getCaloriesByType(data: recordData, mealType: 2);
                       extraCalories =
                           getCaloriesByType(data: recordData, mealType: 3);
+                      consumeCalories = 
+                          getConsumeCalories(data: recordData);
                       intakeCalories = breakfastCalories +
                           lunchCalories +
                           dinnerCalories +
@@ -156,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               weightStaging: userState.settings.weightStaging,
                               totalCalories: userState.settings.totalCalories,
                               intake: intakeCalories,
+                              consume: consumeCalories,
                               suagr: sugar,
                               protein: protein,
                               fat: fat,
