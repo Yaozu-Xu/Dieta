@@ -10,6 +10,7 @@ void main() {
       await tester.pumpWidget(createMockApp(const CaloriesCard(
           weightStaging: 0,
           totalCalories: 1000,
+          consume: 300,
           intake: 100,
           uid: 'tester',
           suagr: 30,

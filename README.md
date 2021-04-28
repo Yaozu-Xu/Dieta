@@ -2,11 +2,16 @@
 
 Dieta has the following features:
 
-💻 Calories Counter
-🍜 Food Database
-📅 Daily Records
-🏃‍♀️ Steps Counter
-📈 Customized Diet Plans
+💻 Calories Counter 
+
+🍜 Food Database 
+
+📅 Daily Records 
+
+🏃‍♀️ Steps Counter 
+
+📈 Customized Diet Plans 
+
 🔔 Sweet Notifications
 
 # Home Screen
@@ -28,10 +33,33 @@ Recommend Diets
 
 <img src="./screenshots/diet.png" width="300" height="600">
 
+# Calendar Screen
+
+Historical Data 
+
+<img src="./screenshots/calendar.jpg" width="300" height="600">
+
 
 # Settings Screen
 
 User Profile and Settings
 
 <img src="./screenshots/settings.png" width="300" height="600">
+
+ 
+
+
+# CI/CD
+
+## Codemagic 
+
+<img src="./screenshots/codemagic.png" >
+ 
+ 
+
+## Sylph && AWS Device Farm
+
+<img src="./screenshots/aws.png">
+
+
 
